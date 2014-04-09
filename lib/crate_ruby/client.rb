@@ -20,7 +20,7 @@ module CrateRuby
     # @param [String] table_name
     # @param [Hash] column_definition
     # @option column_definition [String] key sets column name, value sets column type. an array passed as value can be used to set options like primary keys
-    # @return [ResultSet]
+    # @return [Boolean]
     #
     def create_table(table_name, column_definition = {}, blob=false)
       cols = column_definition.to_a.map { |a| a.join(' ') }.join(', ')
@@ -32,7 +32,7 @@ module CrateRuby
     # @param [String] name Table name
     # @param [Integer] shard Shard count, defaults to 5
     # @param [Integer] number Number of replicas, defaults to 0
-    # @return [ResultSet]
+    # @return [Boolean]
     #
     # client.create_blob_table("blob_table")
     def create_blob_table(name, shard_count=5, replicas=0)
@@ -43,7 +43,7 @@ module CrateRuby
     # Drop table
     # @param [String] table_name, Name of table to drop
     # @param [Boolean] blob Needs to be set to true if table is a blob table
-    # @return [ResultSet]
+    # @return [Boolean]
     def drop_table(table_name, blob=false)
       tbl = blob ? "BLOB TABLE" : "TABLE"
       stmt = %Q{DROP #{tbl} "#{table_name}"}
@@ -79,7 +79,7 @@ module CrateRuby
     # Upload a File to a blob table
     # @param [String] table
     # @param [String] digest SHA1 hexdigest
-    # @param [Object] data Can be any payload object that can be sent via HTTP, e.g. STRING, FILE
+    # @param [Boolean] data Can be any payload object that can be sent via HTTP, e.g. STRING, FILE
     def blob_put(table, digest, data)
       uri = blob_path(table, digest)
       @logger.debug("BLOB PUT #{uri}")
@@ -94,18 +94,14 @@ module CrateRuby
                     @logger.info("Response #{response.code}: " + response.body)
                     false
                 end
-      success
-      # begin
-      #   RestClient::Request.execute(:method => :put, :url => blob_path(table, digest), payload: data)
-      # rescue RestClient::Error => e
-      #  raise BlobExistsError.new "Blob exists"
-      # end
+      success     
     end
 
     # Download blob
     # @param [String] table
     # @param [String] digest SHA1 hexdigest
     #
+    # @return [Blob] File data to write to file or use directly
     def blob_get(table, digest)
       uri = blob_path(table, digest)
       @logger.debug("BLOB GET #{uri}")
@@ -126,6 +122,7 @@ module CrateRuby
     # @param [String] table
     # @param [String] digest SHA1 hexdigest
     #
+    # @return [Boolean]
     def blob_delete(table, digest)
       uri = blob_path(table, digest)
       @logger.debug("BLOB DELETE #{uri}")
@@ -144,7 +141,6 @@ module CrateRuby
     private
 
     def blob_path(table, digest)
-      #"#{@uri}/_blobs/#{table}/#{digest}"
       "/_blobs/#{table}/#{digest}"
     end
 
