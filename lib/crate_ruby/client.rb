@@ -18,7 +18,7 @@ module CrateRuby
     end
 
     def inspect
-      %Q{#<CrateRuby::Client:#{object_id}, @uri="#{@uri}">}
+      %Q{#<CrateRuby::Client:#{object_id}>}
     end
 
     # Creates a table
