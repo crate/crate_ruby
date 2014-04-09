@@ -19,11 +19,12 @@ Or install it yourself as:
 ## Usage
 
 ### Issueing SQL statements
+    require 'crate_ruby'
 
     # optional args :host, :port, :logger
     client = CrateRuby::Client.new
     result = client.execute("Select * from posts")
-     => #<CrateRuby::ResultSet:0x00000002a9c5e8 @cols=["id", "my_column", "my_integer_col"], @rows=[[1, "test", 5]], @rowcount=1, @duration=5>
+     => #<CrateRuby::ResultSet:0x00000002a9c5e8 @rowcount=1, @duration=5>
     result.each do |row|
       puts row.inspect # [1, "test", 5]
     end

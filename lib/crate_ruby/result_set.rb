@@ -13,6 +13,10 @@ module CrateRuby
       @duration = result['duration']
     end
 
+    def inspect
+      %Q{#<CrateRuby::ResultSet:#{object_id}>, @rowcount="#{@rowcount}", @duration=#{@duration}>}
+    end
+
     def <<(val)
       @rows << val
     end

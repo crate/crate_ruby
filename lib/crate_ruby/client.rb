@@ -5,6 +5,8 @@ module CrateRuby
     DEFAULT_HOST = "127.0.0.1"
     DEFAULT_PORT = "4200"
 
+    attr_accessor :logger
+
     # @param [opts] Optional paramters
     # * host: ip or host name, defaults to 127.0.0.1
     # * port: defaults to 4200
@@ -13,6 +15,10 @@ module CrateRuby
       @port = opts[:port] || DEFAULT_PORT
       @uri = "http://#{DEFAULT_HOST}:#{DEFAULT_PORT}"
       @logger = opts[:logger] || CrateRuby.logger
+    end
+
+    def inspect
+      %Q{#<CrateRuby::Client:#{object_id}, @uri="#{@uri}">}
     end
 
     # Creates a table
