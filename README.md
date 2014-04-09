@@ -18,6 +18,9 @@ Or install it yourself as:
 
 ## Usage
 
+### Issueing SQL statements
+
+    # optional args :host, :port, :logger
     client = CrateRuby::Client.new
     result = client.execute("Select * from posts")
      => #<CrateRuby::ResultSet:0x00000002a9c5e8 @cols=["id", "my_column", "my_integer_col"], @rows=[[1, "test", 5]], @rowcount=1, @duration=5>
@@ -27,6 +30,22 @@ Or install it yourself as:
 
     result.cols
      => ["id", "my_column", "my_integer_col"]
+
+### Up/Downloading data
+    digest = Digest::SHA1.file(file_path).hexdigest
+
+    #upload
+    f = File.read(file_path)
+    client.blob_put(table_name, digest, f)
+
+    #download
+    data = client.blob_get(table_name, digest)
+    open(file_path, "wb") do |file|
+      file.write(data)
+    end
+
+    #deletion
+    client.blob_delete(table_name, digest)
 
 ## Contributing
 
