@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = CrateRuby::VERSION
   spec.authors       = ["Christoph Klocker"]
   spec.email         = ["christoph@vedanova.com"]
-  spec.summary       = "A simple interface to Crate Data, a high performance database."
+  spec.summary       = "A simple interface to Crate Data."
   spec.description   = ""
-  spec.source        = "https://github.com/crate/crate-ruby"
+  spec.source        = "https://github.com/crate/crate_ruby"
   spec.homepage      = "http://crate.io"
   spec.license       = "MIT"
 

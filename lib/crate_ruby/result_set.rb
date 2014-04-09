@@ -8,7 +8,7 @@ module CrateRuby
     def initialize(result)
       result = JSON.parse(result)
       @cols = result['cols']
-      @rows = result  ['rows']
+      @rows = result['rows']
       @rowcount = result['rowcount']
       @duration = result['duration']
     end
