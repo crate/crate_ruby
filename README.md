@@ -1,6 +1,6 @@
 # CrateRuby
 
-TODO: Write a gem description
+Official ruby library to access a (Crate)[http://crate.io] database.
 
 ## Installation
 
@@ -18,12 +18,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    client = CrateRuby::Client.new
+    result = client.execute("Select * from posts")
+     => #<CrateRuby::ResultSet:0x00000002a9c5e8 @cols=["id", "my_column", "my_integer_col"], @rows=[[1, "test", 5]], @rowcount=1, @duration=5>
+    result.each do |row|
+      puts row.inspect # [1, "test", 5]
+    end
+
+    result.cols
+     => ["id", "my_column", "my_integer_col"]
 
 ## Contributing
 
 1. Fork it ( http://github.com/<my-github-username>/crate_ruby/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+3. Add some tests
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create new Pull Request

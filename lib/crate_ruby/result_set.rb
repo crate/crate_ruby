@@ -2,7 +2,7 @@ module CrateRuby
   class ResultSet
     include Enumerable
 
-    attr_reader :rowcount, :duration, :cols, :rows
+    attr_reader :rowcount, :duration, :cols
 
     # @param [String] Crate result
     def initialize(result)
@@ -19,10 +19,18 @@ module CrateRuby
 
     def each(&block)
       @rows.each(&block)
+      nil
     end
 
     def [](val)
       @rows[val]
+    end
+
+    # @param [Array] ary Column names to filer on
+    # @return [Array] Filtered rows
+    def select_columns(ary, &block)
+      indexes = ary.map {|col| @cols.index(col)}.compact
+      @rows.map{|r| r.values_at(*indexes)}.each(&block)
     end
 
   end

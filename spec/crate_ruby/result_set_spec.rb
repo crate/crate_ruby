@@ -19,11 +19,7 @@ describe ResultSet do
       result_set.duration.should eq 4
     end
 
-    it 'should set rows' do
-      result_set.rows.should eq json_result['rows']
-    end
-
-    it 'should set cols' do
+     it 'should set cols' do
       result_set.cols.should eq json_result['cols']
     end
 
@@ -40,6 +36,23 @@ describe ResultSet do
   describe '#[]' do
     it 'should return the row at index' do
       result_set[1][0].should eq('Bar')
+    end
+  end
+
+  describe '#values_at' do
+    it 'should only return the columns specified' do
+      a = []
+      result_set.select_columns(['my_column']) do |res|
+        a << res
+      end
+      a.should eq [["Foo"], ["Bar"]]
+
+    end
+    it 'should not raise error on invalid column name' do
+      expect do
+        result_set.select_columns(['my_column', 'invalid']) do |row|
+        end
+      end.to_not raise_error
     end
   end
 
