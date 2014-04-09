@@ -96,10 +96,8 @@ describe CrateRuby::Client do
 
       it 'should use host and ports parameters' do
         logger = double()
-        client = CrateRuby::Client.new host: "10.0.0.1", port: 5000, logger: logger
-        client.instance_variable_get(:@host).should eq("10.0.0.1")
-        client.instance_variable_get(:@port).should eq(5000)
-        client.instance_variable_get(:@logger).should == logger
+        client = CrateRuby::Client.new ["10.0.0.1:5000"],logger: logger
+        client.instance_variable_get(:@servers).should eq(["10.0.0.1:5000"])
       end
 
     end

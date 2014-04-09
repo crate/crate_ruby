@@ -7,13 +7,13 @@ module CrateRuby
 
     attr_accessor :logger
 
+    # Currently only a single server is supported. Fail over will be implemented in upcoming versions
+    # @param [Array] servers An Array of servers including ports [127.0.0.1:4200, 10.0.0.1:4201]
     # @param [opts] Optional paramters
-    # * host: ip or host name, defaults to 127.0.0.1
-    # * port: defaults to 4200
-    def initialize(opts = {})
-      @host = opts[:host] || DEFAULT_HOST
-      @port = opts[:port] || DEFAULT_PORT
-      @uri = "http://#{DEFAULT_HOST}:#{DEFAULT_PORT}"
+    # * logger: Custom Logger
+    def initialize(servers = [], opts = {})
+      @servers = servers
+      @servers << "#{DEFAULT_HOST}:#{DEFAULT_PORT}" if servers.empty?
       @logger = opts[:logger] || CrateRuby.logger
     end
 
@@ -68,7 +68,7 @@ module CrateRuby
     def execute(sql)
       req = Net::HTTP::Post.new("/_sql", initheader = {'Content-Type' => 'application/json'})
       req.body = {"stmt" => sql}.to_json
-      response = Net::HTTP.new(@host, @port).start { |http| http.request(req) }
+      response = request(req)
       success = case response.code
                   when "200"
                     ResultSet.new response.body
@@ -91,8 +91,7 @@ module CrateRuby
       @logger.debug("BLOB PUT #{uri}")
       req = Net::HTTP::Put.new(blob_path(table, digest))
       req.body = data
-      #req["Content-Type"] = "multipart/form-data, boundary=#{boundary}"
-      response = Net::HTTP.new(@host, @port).start { |http| http.request(req) }
+      response = request(req)
       success = case response.code
                   when "201"
                     true
@@ -100,7 +99,7 @@ module CrateRuby
                     @logger.info("Response #{response.code}: " + response.body)
                     false
                 end
-      success     
+      success
     end
 
     # Download blob
@@ -112,9 +111,7 @@ module CrateRuby
       uri = blob_path(table, digest)
       @logger.debug("BLOB GET #{uri}")
       req = Net::HTTP::Get.new(uri)
-      response = Net::HTTP.new(@host, @port).start do |http|
-        http.request(req)
-      end
+      response = request(req)
       case response.code
         when "200"
           response.body
@@ -133,7 +130,7 @@ module CrateRuby
       uri = blob_path(table, digest)
       @logger.debug("BLOB DELETE #{uri}")
       req = Net::HTTP::Delete.new(uri)
-      response = Net::HTTP.new(@host, @port).start { |http| http.request(req) }
+      response = request(req)
       success = case response.code
                   when "200"
                     true
@@ -150,6 +147,14 @@ module CrateRuby
       "/_blobs/#{table}/#{digest}"
     end
 
+    def connection
+      host, port = @servers.first.split(':');
+      Net::HTTP.new(host, port)
+    end
+    
+    def request(req)
+      connection.start { |http| http.request(req) }
+    end
 
   end
 end
