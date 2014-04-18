@@ -10,7 +10,7 @@ module CrateRuby
     @logger ||= begin
       require 'logger'
       log = Logger.new(File.join(File.dirname(__FILE__), "../log/crate.log"), 10, 1024000)
-      log.level = Logger::DEBUG
+      log.level = Logger::INFO
       log
     end
   end

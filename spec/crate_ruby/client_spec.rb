@@ -1,47 +1,46 @@
 require_relative '../spec_helper'
 
 describe CrateRuby::Client do
+  TABLE_NAME = 'blob_table'
   describe '#create_table' do
-    let(:client) { CrateRuby::Client.new }
+    let(:client) { CrateRuby::Client.new(["localhost:#{TEST_PORT}"]) }
 
     describe 'blob mangament' do
-      let(:table_name) { 'blob_table' }
       let(:file) { 'logo-crate.png' }
-      #let(:file) { 'text.txt' }
       let(:path) { File.join(File.dirname(__FILE__), '../uploads/') }
       let(:file_path) { File.join(path, file) }
       let(:digest) { Digest::SHA1.file(file_path).hexdigest }
       let(:store_location) { File.join(path, "get_#{file}") }
 
-      before do
-        client.execute("create blob TABLE #{table_name}")
+      before(:all) do
+        CrateRuby::Client.new(["localhost:#{TEST_PORT}"]).execute("create blob TABLE #{TABLE_NAME}")
       end
 
-      after do
-        client.execute("drop blog TABLE #{table_name}")
+      after(:all) do
+        CrateRuby::Client.new(["localhost:#{TEST_PORT}"]).execute("drop blob TABLE #{TABLE_NAME}")
       end
 
       describe '#blob_put' do
 
         after do
-          client.blob_delete(table_name, digest)
+          client.blob_delete(TABLE_NAME, digest)
         end
 
         context 'file' do
 
           it 'should upload a file to the blob table' do
             f = File.read(file_path)
-            client.blob_put(table_name, digest, f).should be_true
+            client.blob_put(TABLE_NAME, digest, f).should be_true
           end
         end
 
         context '#string' do
-          let(:string) {"my crazy"}
-          let(:digest) {Digest::SHA1.hexdigest(string)}
+          let(:string) { "my crazy" }
+          let(:digest) { Digest::SHA1.hexdigest(string) }
 
           it 'should upload a string to the blob table' do
-            client.blob_delete(table_name, digest)
-            client.blob_put table_name, digest, string
+            client.blob_delete(TABLE_NAME, digest)
+            client.blob_put TABLE_NAME, digest, string
           end
         end
       end
@@ -50,11 +49,11 @@ describe CrateRuby::Client do
 
         before do
           f = File.read(file_path)
-          client.blob_put(table_name, digest, f)
+          client.blob_put(TABLE_NAME, digest, f)
         end
 
         it 'should download a blob' do
-          data = client.blob_get(table_name, digest)
+          data = client.blob_get(TABLE_NAME, digest)
           data.should_not be_false
           open(store_location, "wb") { |file|
             file.write(data)
@@ -62,31 +61,31 @@ describe CrateRuby::Client do
         end
 
         after do
-          client.blob_delete(table_name, digest)
+          client.blob_delete(TABLE_NAME, digest)
         end
       end
 
       describe '#blob_delete' do
         before do
           f = File.read(file_path)
-          client.blob_put(table_name, digest, f)
+          client.blob_put(TABLE_NAME, digest, f)
         end
 
         it 'should delete a blob' do
-          client.blob_delete(table_name, digest)
+          client.blob_delete(TABLE_NAME, digest)
         end
       end
     end
 
     describe '#execute' do
-      let(:table_name) { "post" }
+      let(:TABLE_NAME) { "post" }
 
       after do
-        client.execute("drop TABLE #{table_name}").should be_true
+        client.execute("drop TABLE #{TABLE_NAME}").should be_true
       end
 
       it 'should create a new table' do
-        client.execute("CREATE TABLE #{table_name} (id int)").should be_true
+        client.execute("CREATE TABLE #{TABLE_NAME} (id int)").should be_true
       end
 
     end
@@ -96,10 +95,54 @@ describe CrateRuby::Client do
 
       it 'should use host and ports parameters' do
         logger = double()
-        client = CrateRuby::Client.new ["10.0.0.1:5000"],logger: logger
+        client = CrateRuby::Client.new ["10.0.0.1:5000"], logger: logger
         client.instance_variable_get(:@servers).should eq(["10.0.0.1:5000"])
       end
+    end
 
+    describe '#tables' do
+      before do
+        client.create_table "posts", id: :integer
+        client.create_table "comments", id: :integer
+      end
+
+      after do
+        client.drop_table "posts"
+        client.drop_table "comments"
+      end
+
+      it 'should return all user tables as an array of string values' do
+        client.tables.should eq ['posts', 'comments']
+      end
+    end
+
+
+    describe '#insert' do
+      before do
+        client.create_table("posts", id: [:string, "primary key"],
+                            title: :string,
+                            views: :integer)
+      end
+
+      after do
+        client.drop_table "posts"
+      end
+
+      it 'should insert the record' do
+        expect do
+          client.insert('posts', id: SecureRandom.uuid, title: "Test" )
+          sleep(1)
+          result_set = client.execute("Select * from posts where title = 'Test'")
+          result_set.rowcount.should eq 1
+        end.not_to raise_exception
+      end
+    end
+
+    describe '#refresh table' do
+      it 'should issue the proper refresh statment' do
+        client.should_receive(:execute).with("refresh table posts")
+        client.refresh_table('posts')
+      end
     end
 
   end

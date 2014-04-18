@@ -56,6 +56,12 @@ describe ResultSet do
     end
   end
 
+  describe '#values' do
+    it 'should return all rows as an array of arrays' do
+      result_set.values.should eq json_result['rows']
+    end
+  end
+
 end
 
 

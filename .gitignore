@@ -18,3 +18,4 @@ tmp
 .idea/*
 .rvmrc
 log/crate.log
+crate_test_server.*

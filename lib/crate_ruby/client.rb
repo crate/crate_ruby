@@ -59,24 +59,30 @@ module CrateRuby
     # List all user tables
     # @return [ResultSet]
     def show_tables
-      execute("select * from information_schema.tables where schema_name = 'doc'")
+      execute("select table_name from information_schema.tables where schema_name = 'doc'")
+    end
+
+    # Returns all tables in schema 'doc'
+    # @return [Array] Array of table names
+    def tables
+      execute("select table_name from information_schema.tables where schema_name = 'doc'").map(&:first)
     end
 
     # Executes a SQL statement against the Crate HTTP REST endpoint.
     # @param [String] sql statement to execute
     # @return [ResultSet, false]
     def execute(sql)
+      @logger.debug sql
       req = Net::HTTP::Post.new("/_sql", initheader = {'Content-Type' => 'application/json'})
       req.body = {"stmt" => sql}.to_json
       response = request(req)
+      @logger.debug response.body
       success = case response.code
-                  when "200"
+                  when /^2\d{2}/
                     ResultSet.new response.body
-                  when "400"
-                    @logger.info(response.body)
-                    false
                   else
                     @logger.info(response.body)
+                    raise CrateRuby::CrateError.new(response.body)
                     false
                 end
       success
@@ -141,6 +147,30 @@ module CrateRuby
       success
     end
 
+
+    # Return the table structure
+    # @param [String] table_name Table name to get structure
+    # @param [ResultSet]
+    def table_structure(table_name)
+      execute("select * from information_schema.columns where schema_name = 'doc' AND table_name = '#{table_name}'")
+    end
+
+
+    def insert(table_name, attributes) #:nodoc:#
+      vals = attributes.values.map {|x| x.is_a?(String) ? "'#{x}'" : x}.join(', ')
+      stmt = %Q{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES (#{vals})}
+      execute(stmt)
+    end
+
+    # Crate is eventually consistent, If you don't query by primary key,
+    # it is not guaranteed that an insert record is found on the next
+    # query. Default refresh value is 1000ms.
+    # Using refresh_table you can force a refresh
+    # @param [String] table_name Name of table to refresh
+    def refresh_table(table_name)
+      execute "refresh table #{table_name}"
+    end
+
     private
 
     def blob_path(table, digest)
@@ -151,7 +181,7 @@ module CrateRuby
       host, port = @servers.first.split(':');
       Net::HTTP.new(host, port)
     end
-    
+
     def request(req)
       connection.start { |http| http.request(req) }
     end

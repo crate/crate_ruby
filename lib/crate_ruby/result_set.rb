@@ -4,7 +4,7 @@ module CrateRuby
 
     attr_reader :rowcount, :duration, :cols
 
-    # @param [String] Crate result
+    # @param [String]  result
     def initialize(result)
       result = JSON.parse(result)
       @cols = result['cols']
@@ -23,11 +23,15 @@ module CrateRuby
 
     def each(&block)
       @rows.each(&block)
-      nil
     end
 
     def [](val)
       @rows[val]
+    end
+
+    # @return [Array] Returns all rows as Array of arrays
+    def values
+      @rows
     end
 
     # @param [Array] ary Column names to filer on
