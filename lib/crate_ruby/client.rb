@@ -11,6 +11,7 @@ module CrateRuby
     # @param [Array] servers An Array of servers including ports [127.0.0.1:4200, 10.0.0.1:4201]
     # @param [opts] Optional paramters
     # * logger: Custom Logger
+    # @return [CrateRuby::Client]
     def initialize(servers = [], opts = {})
       @servers = servers
       @servers << "#{DEFAULT_HOST}:#{DEFAULT_PORT}" if servers.empty?
@@ -26,7 +27,7 @@ module CrateRuby
     # @param [String] table_name
     # @param [Hash] column_definition
     # @option column_definition [String] key sets column name, value sets column type. an array passed as value can be used to set options like primary keys
-    # @return [Boolean]
+    # @return [ResultSet]
     #
     def create_table(table_name, column_definition = {}, blob=false)
       cols = column_definition.to_a.map { |a| a.join(' ') }.join(', ')
@@ -38,7 +39,7 @@ module CrateRuby
     # @param [String] name Table name
     # @param [Integer] shard Shard count, defaults to 5
     # @param [Integer] number Number of replicas, defaults to 0
-    # @return [Boolean]
+    # @return [ResultSet]
     #
     # client.create_blob_table("blob_table")
     def create_blob_table(name, shard_count=5, replicas=0)
@@ -49,7 +50,7 @@ module CrateRuby
     # Drop table
     # @param [String] table_name, Name of table to drop
     # @param [Boolean] blob Needs to be set to true if table is a blob table
-    # @return [Boolean]
+    # @return [ResultSet]
     def drop_table(table_name, blob=false)
       tbl = blob ? "BLOB TABLE" : "TABLE"
       stmt = %Q{DROP #{tbl} "#{table_name}"}
@@ -70,7 +71,7 @@ module CrateRuby
 
     # Executes a SQL statement against the Crate HTTP REST endpoint.
     # @param [String] sql statement to execute
-    # @return [ResultSet, false]
+    # @return [ResultSet]
     def execute(sql)
       @logger.debug sql
       req = Net::HTTP::Post.new("/_sql", initheader = {'Content-Type' => 'application/json'})
@@ -83,7 +84,6 @@ module CrateRuby
                   else
                     @logger.info(response.body)
                     raise CrateRuby::CrateError.new(response.body)
-                    false
                 end
       success
     end
@@ -156,8 +156,8 @@ module CrateRuby
     end
 
 
-    def insert(table_name, attributes) #:nodoc:#
-      vals = attributes.values.map {|x| x.is_a?(String) ? "'#{x}'" : x}.join(', ')
+    def insert(table_name, attributes)
+      vals = attributes.values.map { |x| x.is_a?(String) ? "'#{x}'" : x }.join(', ')
       stmt = %Q{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES (#{vals})}
       execute(stmt)
     end

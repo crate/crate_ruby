@@ -5,7 +5,7 @@ describe CrateRuby::Client do
   describe '#create_table' do
     let(:client) { CrateRuby::Client.new(["localhost:#{TEST_PORT}"]) }
 
-    describe 'blob mangament' do
+    describe 'blob management' do
       let(:file) { 'logo-crate.png' }
       let(:path) { File.join(File.dirname(__FILE__), '../uploads/') }
       let(:file_path) { File.join(path, file) }

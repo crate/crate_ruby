@@ -17,9 +17,7 @@ Or install it yourself as:
 ### Issueing SQL statements
     require 'crate_ruby'
 
-    # optional args :host, :port, :logger
-    #
-    client = CrateRuby::Client.new(host: nil, port: nil, logger: nil)
+    client = CrateRuby::Client.new
 
     result = client.execute("Select * from posts")
      => #<CrateRuby::ResultSet:0x00000002a9c5e8 @rowcount=1, @duration=5>
