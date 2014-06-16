@@ -3,6 +3,7 @@ require_relative '../spec_helper'
 describe ResultSet do
 
   let(:crate_result) { "{\"cols\":[\"my_column\",\"my_integer_col\"],\"rows\":[[\"Foo\",5],[\"Bar\",5]],\"rowcount\":1,\"duration\":4}" }
+  let(:result_with_array_col) { %Q{{"cols":["id","tags","title"],"rows":[[1,["awesome","freaky"],"My life with crate"]],"rowcount":1,"duration":2}} }
 
   let(:result_set) { ResultSet.new(crate_result) }
 
@@ -19,8 +20,14 @@ describe ResultSet do
       result_set.duration.should eq 4
     end
 
-     it 'should set cols' do
+    it 'should set cols' do
       result_set.cols.should eq json_result['cols']
+    end
+
+    it 'should parse an array column result into an Array' do
+      res = ResultSet.new(result_with_array_col)
+      res[0][1].should be_a(Array)
+      res[0][1].should eq(["awesome","freaky"])
     end
 
   end
