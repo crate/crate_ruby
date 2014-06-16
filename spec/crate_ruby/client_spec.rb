@@ -78,14 +78,20 @@ describe CrateRuby::Client do
     end
 
     describe '#execute' do
-      let(:TABLE_NAME) { "post" }
+      let(:table_name) { "post" }
 
       after do
-        client.execute("drop TABLE #{TABLE_NAME}").should be_true
+        client.execute("drop TABLE #{table_name}").should be_true
       end
 
       it 'should create a new table' do
-        client.execute("CREATE TABLE #{TABLE_NAME} (id int)").should be_true
+        client.execute("CREATE TABLE #{table_name} (id int)").should be_true
+      end
+
+      it 'should allow parameter substitution' do
+        client.execute("CREATE TABLE #{table_name} (id int, title string, tags array(string) )").should be_true
+        client.execute("INSERT INTO #{table_name} (id, title, tags) VALUES (\$1, \$2, \$3)",
+                       [1, "My life with crate", ['awesome', 'freaky']]).should be_true
       end
 
     end
@@ -107,8 +113,9 @@ describe CrateRuby::Client do
       end
 
       after do
-        client.drop_table "posts"
-        client.drop_table "comments"
+        client.tables.each do |table|
+          client.drop_table table
+        end
       end
 
       it 'should return all user tables as an array of string values' do
@@ -130,9 +137,10 @@ describe CrateRuby::Client do
 
       it 'should insert the record' do
         expect do
-          client.insert('posts', id: SecureRandom.uuid, title: "Test" )
-          sleep(1)
-          result_set = client.execute("Select * from posts where title = 'Test'")
+          id = SecureRandom.uuid
+          client.insert('posts', id: id, title: "Test")
+          client.refresh_table('posts')
+          result_set = client.execute("Select * from posts where id = '#{id}'")
           result_set.rowcount.should eq 1
         end.not_to raise_exception
       end

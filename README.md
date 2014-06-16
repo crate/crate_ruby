@@ -29,6 +29,12 @@ Or install it yourself as:
 
     result.cols
      => ["id", "my_column", "my_integer_col"]
+     
+     
+#### Using parameter substitution
+     
+     client.execute("INSERT INTO posts (id, title, tags) VALUES (\$1, \$2, \$3)",
+                     [1, "My life with crate", ['awesome', 'freaky']])
 
 ### Up/Downloading data
     digest = Digest::SHA1.file(file_path).hexdigest
@@ -54,7 +60,7 @@ To run the tests start up the crate server first
 
 ## Contributing
 
-1. Fork it ( `http://github.com/crate       /crate_ruby/fork` )
+1. Fork it ( `http://github.com/crate/crate_ruby/fork` )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Add some tests
 4. Commit your changes (`git commit -am 'Add some feature'`)

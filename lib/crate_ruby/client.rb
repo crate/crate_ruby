@@ -71,11 +71,14 @@ module CrateRuby
 
     # Executes a SQL statement against the Crate HTTP REST endpoint.
     # @param [String] sql statement to execute
+    # @param [Array] args Array of values used for parameter substitution
     # @return [ResultSet]
-    def execute(sql)
+    def execute(sql, args = nil)
       @logger.debug sql
       req = Net::HTTP::Post.new("/_sql", initheader = {'Content-Type' => 'application/json'})
-      req.body = {"stmt" => sql}.to_json
+      body = {"stmt" => sql}
+      body.merge!({'args' =>  args}) if args
+      req.body = body.to_json
       response = request(req)
       @logger.debug response.body
       success = case response.code
