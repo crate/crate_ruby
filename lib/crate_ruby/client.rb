@@ -83,7 +83,6 @@ module CrateRuby
       @logger.debug response.body
       success = case response.code
                   when /^2\d{2}/
-                    puts response.body
                     ResultSet.new response.body
                   else
                     @logger.info(response.body)
