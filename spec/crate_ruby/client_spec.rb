@@ -94,6 +94,14 @@ describe CrateRuby::Client do
                        [1, "My life with crate", ['awesome', 'freaky']]).should be_true
       end
 
+      it 'should create an object' do
+        client.execute("CREATE TABLE  #{table_name} (id STRING PRIMARY KEY, name string, address object) ")
+        client.execute(%Q{INSERT INTO  #{table_name} (address, id, name) VALUES ({"street"="1010 W 2nd Ave","city"="Vancouver"}, 'fb7183ac-d049-462c-85a9-732aca59a1c1', 'Mad Max')})
+        client.refresh_table table_name
+        client.execute(%Q{select * from #{table_name}})
+
+      end
+
     end
 
 

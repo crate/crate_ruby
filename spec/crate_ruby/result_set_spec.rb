@@ -4,6 +4,7 @@ describe ResultSet do
 
   let(:crate_result) { "{\"cols\":[\"my_column\",\"my_integer_col\"],\"rows\":[[\"Foo\",5],[\"Bar\",5]],\"rowcount\":1,\"duration\":4}" }
   let(:result_with_array_col) { %Q{{"cols":["id","tags","title"],"rows":[[1,["awesome","freaky"],"My life with crate"]],"rowcount":1,"duration":2}} }
+  let(:result_with_object) { %Q{{"cols":["address","id","name"],"rows":[[{"street":"1010 W 2nd Ave","city":"Vancouver"},"fb7183ac-d049-462c-85a9-732aca59a1c1","Mad Max"]],"rowcount":1,"duration":3}} }
 
   let(:result_set) { ResultSet.new(crate_result) }
 
@@ -28,6 +29,12 @@ describe ResultSet do
       res = ResultSet.new(result_with_array_col)
       res[0][1].should be_a(Array)
       res[0][1].should eq(["awesome","freaky"])
+    end
+
+    it 'should parse an object column result into an Object' do
+      res = ResultSet.new(result_with_object)
+      res[0][0].should be_a(Hash)
+      res[0][0].should eq({"street" => "1010 W 2nd Ave","city" => "Vancouver"})
     end
 
   end
