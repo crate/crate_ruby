@@ -1,4 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/crate_ruby.svg)](http://badge.fury.io/rb/crate_ruby)
+[![Build Status](https://travis-ci.org/crate/crate_ruby.svg?branch=master)](https://travis-ci.org/crate/crate_ruby)
 [![Code Climate](https://codeclimate.com/github/crate/crate_ruby.png)](https://codeclimate.com/github/crate/crate_ruby)
 
 
