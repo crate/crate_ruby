@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+  - "1.9.3"
+  - "2.1.1"
+  - "2.0.0"
+# uncomment this line if your project needs to run something other than `rake`:
+
+before_script:
+  - wget https://cdn.crate.io/downloads/releases/crate-0.39.0.tar.gz -O /tmp/crate.tar.gz
+  - tar -xvf /tmp/crate.tar.gz
+  - ls
+  - echo $PWD
+  - bundle exec ruby spec/travis_test_server.rb $PWD/crate-0.39.0/ 4209
+
+script: bundle exec rspec spec
+

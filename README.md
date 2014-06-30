@@ -1,3 +1,6 @@
+[![Code Climate](https://codeclimate.com/github/crate/crate_ruby.png)](https://codeclimate.com/github/crate/crate_ruby)
+
+
 # CrateRuby
 
 Official Ruby library to access a [Crate](http://crate.io) database.
