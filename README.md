@@ -76,7 +76,6 @@ To run the tests start up the crate server first
 
 * [Christoph Klocker](http://www.vedanova.com), [@corck](http://www.twitter.com/corck)
 
-##License
-
-MIT License. Copyright 2014 Vedanova. [http://vedanova.com](http://vedanova.com)
+##License & Copyright
+See LICENSE for details.
 
