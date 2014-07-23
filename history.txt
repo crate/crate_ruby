@@ -1,5 +1,9 @@
 # coding: UTF-8
 
+=== unreleased
+  * now officially supported by Crate Data and available under the
+    Apache 2.0 License
+
 === 0.0.5
 
 Enhancements:

@@ -65,15 +65,13 @@ To run the tests start up the crate server first
 
 ## Contributing
 
-1. Fork it ( `http://github.com/crate/crate_ruby/fork` )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Add some tests
-4. Commit your changes (`git commit -am 'Add some feature'`)
-5. Push to the branch (`git push origin my-new-feature`)
-6. Create new Pull Request
+If you think something is missing, either create a pull request
+or log a new issue, so someone else can tackle it.
+Please refer to CONTRIBUTING.rst for further information.
 
 ##Maintainer
 
+* [CRATE Technology GmbH](http://crate.io)
 * [Christoph Klocker](http://www.vedanova.com), [@corck](http://www.twitter.com/corck)
 
 ##License & Copyright
