@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   spec.email         = ["office@crate.io"]
   spec.summary       = "A simple interface to Crate Data."
   spec.description   = "A ruby interface for Crate Data, a shared-nothing, fully searchable, document-oriented cluster data store."
-  spec.source        = "https://github.com/crate/crate_ruby"
   spec.homepage      = "http://crate.io"
   spec.license       = "Apache License, v2.0"
 
