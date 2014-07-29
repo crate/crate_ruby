@@ -1,6 +1,8 @@
 # coding: UTF-8
 
 === unreleased
+
+=== 0.0.7
   * now officially supported by Crate Data and available under the
     Apache 2.0 License
 
