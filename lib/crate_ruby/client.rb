@@ -181,9 +181,10 @@ module CrateRuby
 
 
     def insert(table_name, attributes)
-      vals = attributes.values.map { |x| x.is_a?(String) ? "'#{x}'" : x }.join(', ')
-      stmt = %Q{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES (#{vals})}
-      execute(stmt)
+      vals = attributes.values
+      binds = vals.count.times.map {|i| "$#{i+1}"}.join(',')
+      stmt = %Q{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES(#{binds})}
+      execute(stmt, vals)
     end
 
     # Crate is eventually consistent, If you don't query by primary key,
