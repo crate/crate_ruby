@@ -1,7 +1,7 @@
 Contributing to Crate Ruby
 ==========================
 
-Thanks for considering contributing to crate active record adapter.
+Thanks for considering contributing to the Crate Data Ruby library.
 
 
 Reporting an issue
@@ -23,8 +23,9 @@ Reporting an issue
 Pull requests
 -------------
 
-Before we can accept any pull requests to CRATE Active Record Adapter we need you to agree to
-our CLA_. Once that is done, we suggest to continue as follows:
+Before we can accept any pull requests to the Crate Data Ruby library
+we need you to agree to our CLA_. Once that is done, we suggest to
+continue as follows:
 
 - Add an issue on Github and let us know that you're working on something.
 
@@ -35,9 +36,11 @@ our CLA_. Once that is done, we suggest to continue as follows:
 - Be descriptive in your PR and commit messages. What is it for, why is it
   needed, etc.
 
+- Make sure the tests pass.
+
 - Squash related commits
 
-.. _CLA: https://crate.io/contribute/agreements/
+.. _CLA: https://crate.io/community/contribute/
 
 
 Rebase
@@ -88,4 +91,3 @@ fixup commits and mark them to squash. But in order for that to work the
 ``autosquash`` setting has to be enabled in the ``.gitconfig``::
 
     git config --global rebase.autosquash true
-
