@@ -1,8 +1,11 @@
 # coding: UTF-8
 
-=== unreleased
-
 === 0.0.7
+
+  * use prepared statements for insert
+
+=== 0.0.6
+
   * now officially supported by Crate Data and available under the
     Apache 2.0 License
 
