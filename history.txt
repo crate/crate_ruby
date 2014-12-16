@@ -1,6 +1,7 @@
 # coding: UTF-8
 
 === unreleased
+  * log to stderr instead of custom file
 
 === 0.0.7
   * now officially supported by Crate Data and available under the
