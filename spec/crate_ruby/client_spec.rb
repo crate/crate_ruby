@@ -23,8 +23,10 @@ require_relative '../spec_helper'
 
 describe CrateRuby::Client do
   TABLE_NAME = 'blob_table'
+  CRATE_HOST = "localhost:44200"
+
   describe '#create_table' do
-    let(:client) { CrateRuby::Client.new(["localhost:#{TEST_PORT}"]) }
+    let(:client) { CrateRuby::Client.new([CRATE_HOST]) }
 
     describe 'blob management' do
       let(:file) { 'logo-crate.png' }
@@ -34,11 +36,11 @@ describe CrateRuby::Client do
       let(:store_location) { File.join(path, "get_#{file}") }
 
       before(:all) do
-        CrateRuby::Client.new(["localhost:#{TEST_PORT}"]).execute("create blob TABLE #{TABLE_NAME}")
+        CrateRuby::Client.new([CRATE_HOST]).execute("create blob TABLE #{TABLE_NAME}")
       end
 
       after(:all) do
-        CrateRuby::Client.new(["localhost:#{TEST_PORT}"]).execute("drop blob TABLE #{TABLE_NAME}")
+        CrateRuby::Client.new([CRATE_HOST]).execute("drop blob TABLE #{TABLE_NAME}")
       end
 
       describe '#blob_put' do
@@ -51,7 +53,7 @@ describe CrateRuby::Client do
 
           it 'should upload a file to the blob table' do
             f = File.read(file_path)
-            client.blob_put(TABLE_NAME, digest, f).should be_true
+            client.blob_put(TABLE_NAME, digest, f).should be_truthy
           end
         end
 
@@ -75,7 +77,7 @@ describe CrateRuby::Client do
 
         it 'should download a blob' do
           data = client.blob_get(TABLE_NAME, digest)
-          data.should_not be_false
+          data.should_not be_falsey
           open(store_location, "wb") { |file|
             file.write(data)
           }
@@ -102,27 +104,25 @@ describe CrateRuby::Client do
       let(:table_name) { "post" }
 
       after do
-        client.execute("drop TABLE #{table_name}").should be_true
+        client.execute("drop TABLE #{table_name}").should be_truthy
       end
 
       it 'should create a new table' do
-        client.execute("CREATE TABLE #{table_name} (id int)").should be_true
+        client.execute("CREATE TABLE #{table_name} (id int)").should be_truthy
       end
 
       it 'should allow parameter substitution' do
-        client.execute("CREATE TABLE #{table_name} (id int, title string, tags array(string) )").should be_true
+        client.execute("CREATE TABLE #{table_name} (id int, title string, tags array(string) )").should be_truthy
         client.execute("INSERT INTO #{table_name} (id, title, tags) VALUES (\$1, \$2, \$3)",
-                       [1, "My life with crate", ['awesome', 'freaky']]).should be_true
+                       [1, "My life with crate", ['awesome', 'freaky']]).should be_truthy
       end
 
       it 'should create an object' do
         client.execute("CREATE TABLE  #{table_name} (id STRING PRIMARY KEY, name string, address object) ")
-        client.execute(%Q{INSERT INTO  #{table_name} (address, id, name) VALUES ({"street"="1010 W 2nd Ave","city"="Vancouver"}, 'fb7183ac-d049-462c-85a9-732aca59a1c1', 'Mad Max')})
+        client.execute(%Q{INSERT INTO  #{table_name} (address, id, name) VALUES ({street='1010 W 2nd Ave',city='Vancouver'}, 'fb7183ac-d049-462c-85a9-732aca59a1c1', 'Mad Max')})
         client.refresh_table table_name
         client.execute(%Q{select * from #{table_name}})
-
       end
-
     end
 
 

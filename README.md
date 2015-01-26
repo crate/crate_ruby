@@ -34,34 +34,39 @@ Or install it yourself as:
 
     result.cols
      => ["id", "my_column", "my_integer_col"]
-     
-     
+
+
 #### Using parameter substitution
-     
+
      client.execute("INSERT INTO posts (id, title, tags) VALUES (\$1, \$2, \$3)",
                      [1, "My life with crate", ['awesome', 'freaky']])
 
 ### Up/Downloading data
+
     digest = Digest::SHA1.file(file_path).hexdigest
 
-    #upload
+    # upload
     f = File.read(file_path)
     client.blob_put(table_name, digest, f)
 
-    #download
+    # download
     data = client.blob_get(table_name, digest)
     open(file_path, "wb") do |file|
       file.write(data)
     end
 
-    #deletion
+    # deletion
     client.blob_delete(table_name, digest)
 
 ## Tests
 
-To run the tests start up the crate server first
+Start up the crate server before running the tests
 
-    ruby spec/test_server.rb
+    ruby spec/test_server.rb /path/to/crate
+
+Then run tests with
+
+    bundle exec rspec spec
 
 ## Contributing
 

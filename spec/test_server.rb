@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
@@ -20,57 +21,53 @@
 # software solely pursuant to the terms of the relevant commercial agreement.
 
 require 'net/http'
+
 class TestServer
-  CRATE_PATH = "~/crate"
-  TEST_PORT = 4209
   NAME = "TestCluster"
+  HOST = "127.0.0.1"
+  PORT = 44200
+  TIMEOUT = 30
 
-
-  def initialize(crate_home = nil, port = nil, host = "127.0.0.1")
-    @crate_home = crate_home || CRATE_PATH
-    @port = port || TEST_PORT
-    @host = host
+  def initialize(crate_home = '~/crate', run_in_background = false)
+    @crate_home = crate_home
+    @run_in_background = run_in_background
   end
 
   def start
-    cmd = "sh #{CRATE_PATH}/bin/crate #{start_params}"
-    @pid = spawn(cmd, :out => "/tmp/crate_test_server.out", :err => "/tmp/crate_test_server.err")
+    cmd = "sh #{File.join(@crate_home, 'bin', 'crate')} #{start_params}"
+    @pid = spawn(cmd, out: "/tmp/crate_test_server.out",
+                 err: "/tmp/crate_test_server.err")
     Process.detach(@pid)
-    puts 'starting'
+    puts 'Starting Crate... (this will take a few seconds)'
     time_slept = 0
+    interval = 2
     while true
-      puts "Crate not yet fully available. Waiting since #{time_slept} seconds..." unless alive?
-      sleep(2)
-      time_slept += 2
+      if !alive? and time_slept > TIMEOUT
+        puts "Crate hasn't started for #{TIMEOUT} seconds. Giving up now..."
+        exit
+      end
+      if alive? and @run_in_background
+        exit
+      end
+      sleep(interval)
+      time_slept += interval
     end
-  end
-
-  def stop
-    Process.kill("HUP", @pid)
   end
 
   private
 
-
-  def crate_exec
-  end
-
-  def crate_config
-  end
-
   def start_params
     "-Des.index.storage.type=memory " +
         "-Des.node.name=#{NAME} " +
-        "-Des.cluster.name=Testing#{@port} " +
-        "-Des.http.port=#{@port}-#{@port} " +
+        "-Des.cluster.name=Testing#{PORT} " +
+        "-Des.http.port=#{PORT}-#{PORT} " +
         "-Des.network.host=localhost " +
-        "-Des.discovery.type=zen " +
         "-Des.discovery.zen.ping.multicast.enabled=false"
   end
 
   def alive?
     req = Net::HTTP::Get.new('/')
-    resp = Net::HTTP.new(@host, @port)
+    resp = Net::HTTP.new(HOST, PORT)
     begin
       response = resp.start { |http| http.request(req) }
       response.code == "200" ? true : false
@@ -78,14 +75,7 @@ class TestServer
       false
     end
   end
-
 end
 
-server = TestServer.new.start *ARGV
-
-trap("INT") do
-  puts "Script terminated by user."
-  server.stop
-  puts "Server stopped"
-  exit
-end
+server = TestServer.new(*ARGV)
+server.start
