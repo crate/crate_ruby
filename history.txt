@@ -1,5 +1,7 @@
 # coding: UTF-8
 
+  * update travis.yml and fix broken test
+
 === 0.0.7
 
   * use prepared statements for insert
