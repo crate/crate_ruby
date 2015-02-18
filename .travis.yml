@@ -8,9 +8,9 @@ sudo:
   false
 
 before_script:
-  - wget https://cdn.crate.io/downloads/releases/crate-0.45.7.tar.gz -O /tmp/crate.tar.gz
+  - wget https://cdn.crate.io/downloads/releases/crate-0.47.3.tar.gz -O /tmp/crate.tar.gz
   - tar -xvf /tmp/crate.tar.gz
-  - bundle exec ruby spec/test_server.rb $PWD/crate-0.45.7/ true
+  - bundle exec ruby spec/test_server.rb $PWD/crate-0.47.3/ true
 
 script: bundle exec rspec spec
 
