@@ -1,5 +1,7 @@
 # coding: UTF-8
 
+  * removed ruby 1.9.3 from travis.yml
+  * client now supports HTTP options
   * update travis.yml and fix broken test
 
 === 0.0.7

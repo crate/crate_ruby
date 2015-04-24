@@ -123,6 +123,13 @@ describe CrateRuby::Client do
         client.refresh_table table_name
         client.execute(%Q{select * from #{table_name}})
       end
+
+      it 'should accept http options' do
+        client.execute("CREATE TABLE  #{table_name} (id STRING PRIMARY KEY, name string, address object) ")
+        client.execute(%Q{INSERT INTO  #{table_name} (address, id, name) VALUES ({street='1010 W 2nd Ave',city='Vancouver'}, 'fb7183ac-d049-462c-85a9-732aca59a1c1', 'Mad Max')})
+        client.refresh_table table_name
+        expect { client.execute("SELECT * FROM #{table_name}", nil, {read_timeout: 0}) }.to raise_error Net::ReadTimeout
+      end
     end
 
 

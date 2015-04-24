@@ -20,3 +20,4 @@
 # software solely pursuant to the terms of the relevant commercial agreement.
 
 require_relative '../lib/crate_ruby'
+require 'net/http'

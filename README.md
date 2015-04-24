@@ -9,6 +9,8 @@ Official Ruby library to access a [Crate](http://crate.io) database.
 
 ## Installation
 
+This gem requires Ruby 2.0 or greater.
+
 Add this line to your application's Gemfile:
 
     gem 'crate_ruby'
@@ -81,4 +83,3 @@ Please refer to CONTRIBUTING.rst for further information.
 
 ##License & Copyright
 See LICENSE for details.
-
