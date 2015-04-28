@@ -1,6 +1,5 @@
 language: ruby
 rvm:
-  - "1.9.3"
   - "2.0.0"
   - "2.1.5"
   - "2.2.0"
@@ -8,9 +7,8 @@ sudo:
   false
 
 before_script:
-  - wget https://cdn.crate.io/downloads/releases/crate-0.47.3.tar.gz -O /tmp/crate.tar.gz
+  - wget https://cdn.crate.io/downloads/releases/crate-0.48.2.tar.gz -O /tmp/crate.tar.gz
   - tar -xvf /tmp/crate.tar.gz
-  - bundle exec ruby spec/test_server.rb $PWD/crate-0.47.3/ true
+  - bundle exec ruby spec/test_server.rb $PWD/crate-0.48.2/ true
 
 script: bundle exec rspec spec
-

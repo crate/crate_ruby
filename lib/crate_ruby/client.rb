@@ -32,11 +32,13 @@ module CrateRuby
     # @param [Array] servers An Array of servers including ports [127.0.0.1:4200, 10.0.0.1:4201]
     # @param [opts] Optional paramters
     # * logger: Custom Logger
+    # * http_options [Hash]: Net::HTTP options (open_timeout, read_timeout)
     # @return [CrateRuby::Client]
     def initialize(servers = [], opts = {})
       @servers = servers
       @servers << "#{DEFAULT_HOST}:#{DEFAULT_PORT}" if servers.empty?
       @logger = opts[:logger] || CrateRuby.logger
+      @http_options = opts[:http_options] || { read_timeout: 3600 }
     end
 
     def inspect
@@ -93,14 +95,15 @@ module CrateRuby
     # Executes a SQL statement against the Crate HTTP REST endpoint.
     # @param [String] sql statement to execute
     # @param [Array] args Array of values used for parameter substitution
+    # @param [Hash] Net::HTTP options (open_timeout, read_timeout)
     # @return [ResultSet]
-    def execute(sql, args = nil)
+    def execute(sql, args = nil, http_options = {})
       @logger.debug sql
       req = Net::HTTP::Post.new("/_sql", initheader = {'Content-Type' => 'application/json'})
       body = {"stmt" => sql}
       body.merge!({'args' =>  args}) if args
       req.body = body.to_json
-      response = request(req)
+      response = request(req, http_options)
       @logger.debug response.body
       success = case response.code
                   when /^2\d{2}/
@@ -207,8 +210,12 @@ module CrateRuby
       Net::HTTP.new(host, port)
     end
 
-    def request(req)
-      connection.start { |http| http.request(req) }
+    def request(req, http_options = {})
+      options = @http_options.merge(http_options)
+      connection.start do |http|
+        options.each { |opt, value| http.send("#{opt}=", value) }
+        http.request(req)
+      end
     end
 
   end
