@@ -62,11 +62,11 @@ Or install it yourself as:
 
 ## Tests
 
-Start up the crate server before running the tests
+First, download and install Crate locally:
 
-    ruby spec/test_server.rb /path/to/crate
+    ruby spec/bootstrap.rb
 
-Then run tests with
+Then run tests with:
 
     bundle exec rspec spec
 
