@@ -97,11 +97,12 @@ module CrateRuby
     # @param [Array] args Array of values used for parameter substitution
     # @param [Hash] Net::HTTP options (open_timeout, read_timeout)
     # @return [ResultSet]
-    def execute(sql, args = nil, http_options = {})
+    def execute(sql, args = nil, bulk_args = nil, http_options = {})
       @logger.debug sql
       req = Net::HTTP::Post.new("/_sql", initheader = {'Content-Type' => 'application/json'})
       body = {"stmt" => sql}
-      body.merge!({'args' =>  args}) if args
+      body.merge!({'args' => args}) if args
+      body.merge!({'bulk_args' => bulk_args}) if bulk_args
       req.body = body.to_json
       response = request(req, http_options)
       @logger.debug response.body
