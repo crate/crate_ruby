@@ -28,8 +28,8 @@ Gem::Specification.new do |spec|
   spec.version       = CrateRuby::VERSION
   spec.authors       = ["Christoph Klocker", "CRATE Technology GmbH"]
   spec.email         = ["office@crate.io"]
-  spec.summary       = "A simple interface for the Crate database"
-  spec.description   = "A Ruby interface for Crate, the distributed database for Docker."
+  spec.summary       = "A simple interface for the Crate.IO database."
+  spec.description   = "A Ruby interface for Crate.IO. Put your data to work. Simply."
   spec.homepage      = "http://crate.io"
   spec.license       = "Apache License, v2.0"
   spec.required_ruby_version = '>= 2.0'

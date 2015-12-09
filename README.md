@@ -5,7 +5,7 @@
 
 # CrateRuby
 
-Official Ruby library to access a [Crate](http://crate.io) database.
+Official Ruby library to access the [Crate.IO](http://crate.io) database.
 
 ## Installation
 
@@ -22,6 +22,7 @@ Or install it yourself as:
 ## Usage
 
 ### Issueing SQL statements
+
     require 'crate_ruby'
 
     client = CrateRuby::Client.new
@@ -76,10 +77,11 @@ If you think something is missing, either create a pull request
 or log a new issue, so someone else can tackle it.
 Please refer to CONTRIBUTING.rst for further information.
 
-##Maintainer
+## Maintainer
 
 * [CRATE Technology GmbH](http://crate.io)
 * [Christoph Klocker](http://www.vedanova.com), [@corck](http://www.twitter.com/corck)
 
-##License & Copyright
+## License & Copyright
+
 See LICENSE for details.
