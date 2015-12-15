@@ -21,7 +21,7 @@ Or install it yourself as:
 
 ## Usage
 
-### Issueing SQL statements
+### Issuing SQL statements
 
     require 'crate_ruby'
 
