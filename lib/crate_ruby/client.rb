@@ -83,13 +83,13 @@ module CrateRuby
     # List all user tables
     # @return [ResultSet]
     def show_tables
-      execute("select table_name from information_schema.tables where schema_name = 'doc'")
+      execute("select table_name from information_schema.tables where table_schema = 'doc'")
     end
 
     # Returns all tables in schema 'doc'
     # @return [Array] Array of table names
     def tables
-      execute("select table_name from information_schema.tables where schema_name = 'doc'").map(&:first)
+      execute("select table_name from information_schema.tables where table_schema = 'doc'").map(&:first)
     end
 
     # Executes a SQL statement against the Crate HTTP REST endpoint.
@@ -180,7 +180,7 @@ module CrateRuby
     # @param [String] table_name Table name to get structure
     # @param [ResultSet]
     def table_structure(table_name)
-      execute("select * from information_schema.columns where schema_name = 'doc' AND table_name = '#{table_name}'")
+      execute("select * from information_schema.columns where table_schema = 'doc' AND table_name = '#{table_name}'")
     end
 
 
