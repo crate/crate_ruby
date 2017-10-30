@@ -1,5 +1,9 @@
 # coding: UTF-8
 
+  * fixed breaking changes that kept driver from working with crate > v2.0
+
+=== 0.0.8
+
   * removed ruby 1.9.3 from travis.yml
   * client now supports HTTP options
   * update travis.yml and fix broken test
