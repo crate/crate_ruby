@@ -67,7 +67,6 @@ module CrateRuby
 
     def start
       cmd = "sh #{@crate_bin} #{start_params}"
-      puts cmd
       @pid = spawn(cmd)
       wait_for
       Process.detach(@pid)

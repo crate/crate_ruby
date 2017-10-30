@@ -20,11 +20,11 @@
 # software solely pursuant to the terms of the relevant commercial agreement.
 
 require_relative '../spec_helper'
+require 'securerandom'
 
 describe CrateRuby::Client do
   let(:client) { CrateRuby::Client.new(['localhost:44200']) }
-  let(:cluster) {  }
-
+  
   before(:all) do
     @cluster = CrateRuby::TestCluster.new(1)
     @cluster.start_nodes
@@ -159,7 +159,7 @@ describe CrateRuby::Client do
       end
 
       it 'should return all user tables as an array of string values' do
-        client.tables.should eq ['posts', 'comments']
+        client.tables.should eq %w(comments posts)
       end
     end
 
