@@ -26,7 +26,7 @@ require 'zlib'
 
 class Bootstrap
 
-  VERSION = '0.52.4'
+  VERSION = '2.1.8'
 
   def initialize
     @fname = "crate-#{VERSION}.tar.gz"
