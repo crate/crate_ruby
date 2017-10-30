@@ -96,10 +96,9 @@ module CrateRuby
     private
 
     def start_params
-      "-Des.index.storage.type=memory " +
-          "-Des.node.name=#{@node_name} " +
-          "-Des.http.port=#{@http_port} " +
-          "-Des.network.host=localhost "
+      "-Cnode.name=#{@node_name} " +
+        "-Chttp.port=#{@http_port} " +
+        "-Cnetwork.host=localhost "
     end
 
     def alive?
