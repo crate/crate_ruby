@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "A simple interface for the Crate.IO database."
   spec.description   = "A Ruby interface for Crate.IO. Put your data to work. Simply."
   spec.homepage      = "http://crate.io"
-  spec.license       = "Apache License, v2.0"
+  spec.license       = "Apache-2.0"
   spec.required_ruby_version = '>= 2.0'
 
   spec.files         = `git ls-files -z`.split("\x0")
