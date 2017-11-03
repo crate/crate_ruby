@@ -26,19 +26,21 @@ module CrateRuby
     DEFAULT_HOST = "127.0.0.1"
     DEFAULT_PORT = "4200"
 
-    attr_accessor :logger
+    attr_accessor :logger, :schema
 
     # Currently only a single server is supported. Fail over will be implemented in upcoming versions
     # @param [Array] servers An Array of servers including ports [127.0.0.1:4200, 10.0.0.1:4201]
-    # @param [opts] Optional paramters
+    # @param [opts] Optional parameters
     # * logger: Custom Logger
     # * http_options [Hash]: Net::HTTP options (open_timeout, read_timeout)
+    # * schema [String]: Default schema to search in
     # @return [CrateRuby::Client]
     def initialize(servers = [], opts = {})
       @servers = servers
       @servers << "#{DEFAULT_HOST}:#{DEFAULT_PORT}" if servers.empty?
       @logger = opts[:logger] || CrateRuby.logger
       @http_options = opts[:http_options] || { read_timeout: 3600 }
+      @schema = opts[:schema] || 'doc'
     end
 
     def inspect
@@ -83,13 +85,13 @@ module CrateRuby
     # List all user tables
     # @return [ResultSet]
     def show_tables
-      execute("select table_name from information_schema.tables where table_schema = 'doc'")
+      execute("select table_name from information_schema.tables where table_schema = '#{schema}'")
     end
 
     # Returns all tables in schema 'doc'
     # @return [Array] Array of table names
     def tables
-      execute("select table_name from information_schema.tables where table_schema = 'doc'").map(&:first)
+      execute("select table_name from information_schema.tables where table_schema = '#{schema}'").map(&:first)
     end
 
     # Executes a SQL statement against the Crate HTTP REST endpoint.
@@ -99,7 +101,7 @@ module CrateRuby
     # @return [ResultSet]
     def execute(sql, args = nil, bulk_args = nil, http_options = {})
       @logger.debug sql
-      req = Net::HTTP::Post.new("/_sql", initheader = {'Content-Type' => 'application/json'})
+      req = Net::HTTP::Post.new("/_sql", headers)
       body = {"stmt" => sql}
       body.merge!({'args' => args}) if args
       body.merge!({'bulk_args' => bulk_args}) if bulk_args
@@ -123,7 +125,7 @@ module CrateRuby
     def blob_put(table, digest, data)
       uri = blob_path(table, digest)
       @logger.debug("BLOB PUT #{uri}")
-      req = Net::HTTP::Put.new(blob_path(table, digest))
+      req = Net::HTTP::Put.new(blob_path(table, digest), headers)
       req.body = data
       response = request(req)
       success = case response.code
@@ -144,7 +146,7 @@ module CrateRuby
     def blob_get(table, digest)
       uri = blob_path(table, digest)
       @logger.debug("BLOB GET #{uri}")
-      req = Net::HTTP::Get.new(uri)
+      req = Net::HTTP::Get.new(uri, headers)
       response = request(req)
       case response.code
         when "200"
@@ -163,7 +165,7 @@ module CrateRuby
     def blob_delete(table, digest)
       uri = blob_path(table, digest)
       @logger.debug("BLOB DELETE #{uri}")
-      req = Net::HTTP::Delete.new(uri)
+      req = Net::HTTP::Delete.new(uri,headers)
       response = request(req)
       success = case response.code
                   when "200"
@@ -180,9 +182,8 @@ module CrateRuby
     # @param [String] table_name Table name to get structure
     # @param [ResultSet]
     def table_structure(table_name)
-      execute("select * from information_schema.columns where table_schema = 'doc' AND table_name = '#{table_name}'")
+      execute("select * from information_schema.columns where table_schema = '#{schema}' AND table_name = '#{table_name}'")
     end
-
 
     def insert(table_name, attributes)
       vals = attributes.values
@@ -219,5 +220,10 @@ module CrateRuby
       end
     end
 
+    def headers
+      header = {'Content-Type' => 'application/json'}
+      header.merge!({'Default-Schema' => schema}) if schema
+      header
+    end
   end
 end

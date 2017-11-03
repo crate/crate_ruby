@@ -24,7 +24,8 @@ require 'securerandom'
 
 describe CrateRuby::Client do
   let(:client) { CrateRuby::Client.new(['localhost:44200']) }
-  
+  let(:client_w_schema) { CrateRuby::Client.new(['localhost:44200'], schema: 'custom') }
+
   before(:all) do
     @cluster = CrateRuby::TestCluster.new(1)
     @cluster.start_nodes
@@ -126,6 +127,19 @@ describe CrateRuby::Client do
       it 'should accept http options' do
         expect { client.execute("select * from #{table_name}", nil, nil, {'read_timeout'=>0}) }.to raise_error Net::ReadTimeout
       end
+
+      context 'with schema' do
+        before { client_w_schema.execute("create table #{table_name} (id integer primary key, name string, address object, tags array(string)) ") }
+        after { client_w_schema.execute("drop table #{table_name}") }
+
+        it 'should allow parameters' do
+          client_w_schema.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
+                         [1, "Post 1", {:street=>'1010 W 2nd Ave', :city=>'Vancouver'}, ['awesome', 'freaky']]).should be_truthy
+          client_w_schema.refresh_table table_name
+          client.execute("select * from #{table_name}").rowcount.should_not eq(1)
+          client_w_schema.execute("select * from #{table_name}").rowcount.should eq(1)
+        end
+      end
     end
 
 
@@ -167,8 +181,7 @@ describe CrateRuby::Client do
     describe '#insert' do
       before do
         client.create_table("posts", id: [:string, "primary key"],
-                             title: :string,
-                             views: :integer)
+                             title: :string, views: :integer)
       end
 
       after do
