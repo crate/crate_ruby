@@ -30,7 +30,7 @@ module CrateRuby
 
     # Currently only a single server is supported. Fail over will be implemented in upcoming versions
     # @param [Array] servers An Array of servers including ports [127.0.0.1:4200, 10.0.0.1:4201]
-    # @param [opts] Optional parameters
+    # @param [opts] opts Optional parameters
     # * logger: Custom Logger
     # * http_options [Hash]: Net::HTTP options (open_timeout, read_timeout)
     # * schema [String]: Default schema to search in
@@ -62,8 +62,8 @@ module CrateRuby
 
     # Creates a table for storing blobs
     # @param [String] name Table name
-    # @param [Integer] shard Shard count, defaults to 5
-    # @param [Integer] number Number of replicas, defaults to 0
+    # @param [Integer] shard_count Shard count, defaults to 5
+    # @param [Integer] replicas Number of replicas, defaults to 0
     # @return [ResultSet]
     #
     # client.create_blob_table("blob_table")
@@ -97,7 +97,8 @@ module CrateRuby
     # Executes a SQL statement against the Crate HTTP REST endpoint.
     # @param [String] sql statement to execute
     # @param [Array] args Array of values used for parameter substitution
-    # @param [Hash] Net::HTTP options (open_timeout, read_timeout)
+    # @param [Array] bulk_args List of lists containing records to be processed
+    # @param [Hash] http_options Net::HTTP options (open_timeout, read_timeout)
     # @return [ResultSet]
     def execute(sql, args = nil, bulk_args = nil, http_options = {})
       @logger.debug sql
