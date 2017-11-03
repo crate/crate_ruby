@@ -50,7 +50,8 @@ module CrateRuby
     #     client.create_table "posts", id: [:integer, "primary key"], my_column: :string, my_integer_col: :integer
     # @param [String] table_name
     # @param [Hash] column_definition
-    # @option column_definition [String] key sets column name, value sets column type. an array passed as value can be used to set options like primary keys
+    # @option column_definition [String] key sets column name, value sets column type. an array passed as value can
+    # be used to set options like primary keys
     # @return [ResultSet]
     #
     def create_table(table_name, column_definition = {}, _blob = false)
@@ -179,7 +180,8 @@ module CrateRuby
     # @param [String] table_name Table name to get structure
     # @param [ResultSet]
     def table_structure(table_name)
-      execute("select * from information_schema.columns where table_schema = '#{schema}' AND table_name = '#{table_name}'")
+      execute("select * from information_schema.columns where table_schema = '#{schema}' \n
+              AND table_name = '#{table_name}'")
     end
 
     def insert(table_name, attributes)
