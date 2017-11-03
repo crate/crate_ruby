@@ -21,6 +21,7 @@
 require 'json'
 require 'net/http'
 module CrateRuby
+  # Client to interact with Crate.io DB
   class Client
     DEFAULT_HOST = '127.0.0.1'.freeze
     DEFAULT_PORT = '4200'.freeze
