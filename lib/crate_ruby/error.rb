@@ -1,4 +1,3 @@
-# -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -23,5 +22,4 @@ module CrateRuby
   # Base Error class
   class CrateError < StandardError; end
   class BlobExistsError < CrateError; end
-
 end

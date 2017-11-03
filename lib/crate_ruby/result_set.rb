@@ -1,4 +1,3 @@
-# -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -35,7 +34,7 @@ module CrateRuby
     end
 
     def inspect
-      %Q{#<CrateRuby::ResultSet:#{object_id}>, @rowcount="#{@rowcount}", @duration=#{@duration}>}
+      %(#<CrateRuby::ResultSet:#{object_id}>, @rowcount="#{@rowcount}", @duration=#{@duration}>)
     end
 
     def <<(val)
@@ -58,9 +57,8 @@ module CrateRuby
     # @param [Array] ary Column names to filer on
     # @return [Array] Filtered rows
     def select_columns(ary, &block)
-      indexes = ary.map {|col| @cols.index(col)}.compact
-      @rows.map{|r| r.values_at(*indexes)}.each(&block)
+      indexes = ary.map { |col| @cols.index(col) }.compact
+      @rows.map { |r| r.values_at(*indexes) }.each(&block)
     end
-
   end
 end
