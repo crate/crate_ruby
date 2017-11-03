@@ -181,8 +181,8 @@ module CrateRuby
     # @param [String] table_name Table name to get structure
     # @param [ResultSet]
     def table_structure(table_name)
-      execute("select * from information_schema.columns where table_schema = '#{schema}' \n
-              AND table_name = '#{table_name}'")
+      execute("select * from information_schema.columns where table_schema = '#{schema}'" \
+              "AND table_name = '#{table_name}'")
     end
 
     def insert(table_name, attributes)
