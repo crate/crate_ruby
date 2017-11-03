@@ -1,4 +1,3 @@
-# -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -23,8 +22,8 @@ require 'json'
 require 'net/http'
 module CrateRuby
   class Client
-    DEFAULT_HOST = '127.0.0.1'
-    DEFAULT_PORT = '4200'
+    DEFAULT_HOST = '127.0.0.1'.freeze
+    DEFAULT_PORT = '4200'.freeze
 
     attr_accessor :logger, :schema
 
@@ -44,7 +43,7 @@ module CrateRuby
     end
 
     def inspect
-      %Q{#<CrateRuby::Client:#{object_id}>}
+      %(#<CrateRuby::Client:#{object_id}>)
     end
 
     # Creates a table
@@ -54,9 +53,9 @@ module CrateRuby
     # @option column_definition [String] key sets column name, value sets column type. an array passed as value can be used to set options like primary keys
     # @return [ResultSet]
     #
-    def create_table(table_name, column_definition = {}, blob=false)
+    def create_table(table_name, column_definition = {}, _blob = false)
       cols = column_definition.to_a.map { |a| a.join(' ') }.join(', ')
-      stmt = %Q{CREATE TABLE "#{table_name}" (#{cols})}
+      stmt = %{CREATE TABLE "#{table_name}" (#{cols})}
       execute(stmt)
     end
 
@@ -67,7 +66,7 @@ module CrateRuby
     # @return [ResultSet]
     #
     # client.create_blob_table("blob_table")
-    def create_blob_table(name, shard_count=5, replicas=0)
+    def create_blob_table(name, shard_count = 5, replicas = 0)
       stmt = "create blob table #{name} clustered into #{shard_count} shards with (number_of_replicas=#{replicas})"
       execute stmt
     end
@@ -76,9 +75,9 @@ module CrateRuby
     # @param [String] table_name, Name of table to drop
     # @param [Boolean] blob Needs to be set to true if table is a blob table
     # @return [ResultSet]
-    def drop_table(table_name, blob=false)
+    def drop_table(table_name, blob = false)
       tbl = blob ? 'BLOB TABLE' : 'TABLE'
-      stmt = %Q{DROP #{tbl} "#{table_name}"}
+      stmt = %(DROP #{tbl} "#{table_name}")
       execute(stmt)
     end
 
@@ -104,19 +103,19 @@ module CrateRuby
       @logger.debug sql
       req = Net::HTTP::Post.new('/_sql', headers)
       body = { 'stmt' => sql }
-      body.merge!({ 'args' => args }) if args
-      body.merge!({ 'bulk_args' => bulk_args }) if bulk_args
+      body['args'] = args if args
+      body['bulk_args'] = bulk_args if bulk_args
       req.body = body.to_json
       response = request(req, http_options)
       @logger.debug response.body
-      success = case response.code
-                when /^2\d{2}/
-                  ResultSet.new response.body
-                else
-                  @logger.info(response.body)
-                  raise CrateRuby::CrateError.new(response.body)
-                end
-      success
+
+      case response.code
+      when /^2\d{2}/
+        ResultSet.new response.body
+      else
+        @logger.info(response.body)
+        raise CrateRuby::CrateError, response.body
+      end
     end
 
     # Upload a File to a blob table
@@ -129,14 +128,13 @@ module CrateRuby
       req = Net::HTTP::Put.new(blob_path(table, digest), headers)
       req.body = data
       response = request(req)
-      success = case response.code
-                when '201'
-                  true
-                else
-                  @logger.info("Response #{response.code}: " + response.body)
-                  false
-                end
-      success
+      case response.code
+      when '201'
+        true
+      else
+        @logger.info("Response #{response.code}: " + response.body)
+        false
+      end
     end
 
     # Download blob
@@ -168,16 +166,14 @@ module CrateRuby
       @logger.debug("BLOB DELETE #{uri}")
       req = Net::HTTP::Delete.new(uri, headers)
       response = request(req)
-      success = case response.code
-                when '200'
-                  true
-                else
-                  @logger.info("Response #{response.code}: #{response.body}")
-                  false
-                end
-      success
+      case response.code
+      when '200'
+        true
+      else
+        @logger.info("Response #{response.code}: #{response.body}")
+        false
+      end
     end
-
 
     # Return the table structure
     # @param [String] table_name Table name to get structure
@@ -188,8 +184,8 @@ module CrateRuby
 
     def insert(table_name, attributes)
       vals = attributes.values
-      binds = vals.count.times.map { |i| "$#{i+1}" }.join(',')
-      stmt = %Q{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES(#{binds})}
+      binds = vals.count.times.map { |i| "$#{i + 1}" }.join(',')
+      stmt = %{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES(#{binds})}
       execute(stmt, vals)
     end
 
@@ -209,7 +205,7 @@ module CrateRuby
     end
 
     def connection
-      host, port = @servers.first.split(':');
+      host, port = @servers.first.split(':')
       Net::HTTP.new(host, port)
     end
 
@@ -223,7 +219,7 @@ module CrateRuby
 
     def headers
       header = { 'Content-Type' => 'application/json' }
-      header.merge!({ 'Default-Schema' => schema }) if schema
+      header['Default-Schema'] = schema if schema
       header
     end
   end
