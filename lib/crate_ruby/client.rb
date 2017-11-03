@@ -23,8 +23,8 @@ require 'json'
 require 'net/http'
 module CrateRuby
   class Client
-    DEFAULT_HOST = "127.0.0.1"
-    DEFAULT_PORT = "4200"
+    DEFAULT_HOST = '127.0.0.1'
+    DEFAULT_PORT = '4200'
 
     attr_accessor :logger, :schema
 
@@ -77,7 +77,7 @@ module CrateRuby
     # @param [Boolean] blob Needs to be set to true if table is a blob table
     # @return [ResultSet]
     def drop_table(table_name, blob=false)
-      tbl = blob ? "BLOB TABLE" : "TABLE"
+      tbl = blob ? 'BLOB TABLE' : 'TABLE'
       stmt = %Q{DROP #{tbl} "#{table_name}"}
       execute(stmt)
     end
@@ -101,19 +101,19 @@ module CrateRuby
     # @return [ResultSet]
     def execute(sql, args = nil, bulk_args = nil, http_options = {})
       @logger.debug sql
-      req = Net::HTTP::Post.new("/_sql", headers)
-      body = {"stmt" => sql}
-      body.merge!({'args' => args}) if args
-      body.merge!({'bulk_args' => bulk_args}) if bulk_args
+      req = Net::HTTP::Post.new('/_sql', headers)
+      body = { 'stmt' => sql }
+      body.merge!({ 'args' => args }) if args
+      body.merge!({ 'bulk_args' => bulk_args }) if bulk_args
       req.body = body.to_json
       response = request(req, http_options)
       @logger.debug response.body
       success = case response.code
-                  when /^2\d{2}/
-                    ResultSet.new response.body
-                  else
-                    @logger.info(response.body)
-                    raise CrateRuby::CrateError.new(response.body)
+                when /^2\d{2}/
+                  ResultSet.new response.body
+                else
+                  @logger.info(response.body)
+                  raise CrateRuby::CrateError.new(response.body)
                 end
       success
     end
@@ -129,11 +129,11 @@ module CrateRuby
       req.body = data
       response = request(req)
       success = case response.code
-                  when "201"
-                    true
-                  else
-                    @logger.info("Response #{response.code}: " + response.body)
-                    false
+                when '201'
+                  true
+                else
+                  @logger.info("Response #{response.code}: " + response.body)
+                  false
                 end
       success
     end
@@ -149,11 +149,11 @@ module CrateRuby
       req = Net::HTTP::Get.new(uri, headers)
       response = request(req)
       case response.code
-        when "200"
-          response.body
-        else
-          @logger.info("Response #{response.code}: #{response.body}")
-          false
+      when '200'
+        response.body
+      else
+        @logger.info("Response #{response.code}: #{response.body}")
+        false
       end
     end
 
@@ -165,14 +165,14 @@ module CrateRuby
     def blob_delete(table, digest)
       uri = blob_path(table, digest)
       @logger.debug("BLOB DELETE #{uri}")
-      req = Net::HTTP::Delete.new(uri,headers)
+      req = Net::HTTP::Delete.new(uri, headers)
       response = request(req)
       success = case response.code
-                  when "200"
-                    true
-                  else
-                    @logger.info("Response #{response.code}: #{response.body}")
-                    false
+                when '200'
+                  true
+                else
+                  @logger.info("Response #{response.code}: #{response.body}")
+                  false
                 end
       success
     end
@@ -187,7 +187,7 @@ module CrateRuby
 
     def insert(table_name, attributes)
       vals = attributes.values
-      binds = vals.count.times.map {|i| "$#{i+1}"}.join(',')
+      binds = vals.count.times.map { |i| "$#{i+1}" }.join(',')
       stmt = %Q{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES(#{binds})}
       execute(stmt, vals)
     end
@@ -221,8 +221,8 @@ module CrateRuby
     end
 
     def headers
-      header = {'Content-Type' => 'application/json'}
-      header.merge!({'Default-Schema' => schema}) if schema
+      header = { 'Content-Type' => 'application/json' }
+      header.merge!({ 'Default-Schema' => schema }) if schema
       header
     end
   end
