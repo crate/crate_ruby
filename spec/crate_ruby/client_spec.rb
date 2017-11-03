@@ -25,15 +25,6 @@ describe CrateRuby::Client do
   let(:client) { CrateRuby::Client.new(['localhost:44200']) }
   let(:client_w_schema) { CrateRuby::Client.new(['localhost:44200'], schema: 'custom') }
 
-  before(:all) do
-    @cluster = CrateRuby::TestCluster.new(1)
-    @cluster.start_nodes
-  end
-
-  after(:all) do
-    @cluster.stop_nodes
-  end
-
   describe '#create_table' do
     describe 'blob management' do
       let(:file) { 'logo-crate.png' }

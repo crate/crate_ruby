@@ -23,7 +23,6 @@ require "crate_ruby/version"
 require "crate_ruby/error"
 require 'crate_ruby/result_set'
 require 'crate_ruby/client'
-require 'crate_ruby/utils'
 
 include CrateRuby
 
