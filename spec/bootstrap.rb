@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -25,8 +24,7 @@ require 'net/http'
 require 'zlib'
 
 class Bootstrap
-
-  VERSION = '2.1.8'
+  VERSION = '2.1.8'.freeze
 
   def initialize
     @fname = "crate-#{VERSION}.tar.gz"
@@ -34,10 +32,8 @@ class Bootstrap
   end
 
   def run
-    if !File.file?(@crate_bin)
-      if !File.file?(@fname)
-        download
-      end
+    unless File.file?(@crate_bin)
+      download unless File.file?(@fname)
       extract
     end
   end
@@ -45,10 +41,10 @@ class Bootstrap
   def download
     uri = URI("https://cdn.crate.io/downloads/releases/#{@fname}")
     puts "Downloading Crate from #{uri} ..."
-    Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
       request = Net::HTTP::Get.new uri
       resp = http.request request
-      open(@fname, "wb") do |file|
+      open(@fname, 'wb') do |file|
         file.write(resp.body)
       end
     end
@@ -65,7 +61,7 @@ class Bootstrap
       else
         dest_dir = File.dirname(dest_file)
         FileUtils.mkdir_p dest_dir unless File.directory?(dest_dir)
-        File.open dest_file, "wb" do |f|
+        File.open dest_file, 'wb' do |f|
           f.print entry.read
         end
       end
@@ -75,5 +71,4 @@ class Bootstrap
 end
 
 bootstrap = Bootstrap.new(*ARGV)
-bootstrap.run()
-
+bootstrap.run

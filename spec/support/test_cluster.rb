@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -23,12 +22,11 @@
 require 'net/http'
 
 class TestCluster
-
-  def initialize(num_nodes = 1, http_port=44200)
+  def initialize(num_nodes = 1, http_port = 44_200)
     @nodes = []
     idx = 0
-    while idx < num_nodes do
-      name = "crate#{idx-1}"
+    while idx < num_nodes
+      name = "crate#{idx - 1}"
       port = http_port + idx
       @nodes << TestServer.new(name, port)
       idx += 1
@@ -36,21 +34,15 @@ class TestCluster
   end
 
   def start_nodes
-    @nodes.each do |node|
-      node.start
-    end
+    @nodes.each(&:start)
   end
 
   def stop_nodes
-    @nodes.each do |node|
-      node.stop
-    end
+    @nodes.each(&:stop)
   end
-
 end
 
 class TestServer
-
   STARTUP_TIMEOUT = 30
 
   def initialize(name, http_port)
@@ -58,7 +50,7 @@ class TestServer
     @http_port = http_port
 
     @crate_bin = File.join('parts', 'crate', 'bin', 'crate')
-    if !File.file?(@crate_bin)
+    unless File.file?(@crate_bin)
       puts "Crate is not available. Please run 'bundle exec ruby spec/bootstrap.rb' first."
       exit 1
     end
@@ -70,14 +62,14 @@ class TestServer
     wait_for
     Process.detach(@pid)
 
-    File.write(__dir__ + "/testnode.pid", @pid)
+    File.write(__dir__ + '/testnode.pid', @pid)
   end
 
   def wait_for
     time_slept = 0
     interval = 1
-    while true
-      if !alive? and time_slept > STARTUP_TIMEOUT
+    loop do
+      if !alive? && (time_slept > STARTUP_TIMEOUT)
         puts "Crate hasn't started for #{STARTUP_TIMEOUT} seconds. Giving up now..."
         exit 1
       end
@@ -97,9 +89,9 @@ class TestServer
   private
 
   def start_params
-    "-Cnode.name=#{@node_name} " +
-      "-Chttp.port=#{@http_port} " +
-      "-Cnetwork.host=localhost "
+    "-Cnode.name=#{@node_name} " \
+      "-Chttp.port=#{@http_port} " \
+      '-Cnetwork.host=localhost '
   end
 
   def alive?
@@ -107,7 +99,7 @@ class TestServer
     resp = Net::HTTP.new('localhost', @http_port)
     begin
       response = resp.start { |http| http.request(req) }
-      response.code == "200" ? true : false
+      response.code == '200'
     rescue Errno::ECONNREFUSED
       false
     end
