@@ -88,6 +88,16 @@ Schema support
 
     CrateRuby::Client.new(['localhost:44200'], schema: 'my_schema')
 
+Version matrix
+==============
++--------------+------------+
+| Crate Ruby   | CrateDB    |
++==============+============+
+| < 0.9        | < 0.57     |
++--------------+------------+
+| 0.9          | >= 0.57    |
++--------------+------------+
+
 Contributing
 ============
 
