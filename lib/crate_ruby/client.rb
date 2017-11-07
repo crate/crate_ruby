@@ -69,8 +69,8 @@ module CrateRuby
     #
     # client.create_blob_table("blob_table")
     def create_blob_table(name, shard_count = 5, replicas = 0)
-      stmt = "create blob table #{name} clustered into #{shard_count} shards with (number_of_replicas=#{replicas})"
-      execute stmt
+      stmt = 'create blob table ? clustered into ? shards with (number_of_replicas=?)'
+      execute stmt, [name, shard_count, replicas]
     end
 
     # Drop table
@@ -86,13 +86,13 @@ module CrateRuby
     # List all user tables
     # @return [ResultSet]
     def show_tables
-      execute("select table_name from information_schema.tables where table_schema = '#{schema}'")
+      execute('select table_name from information_schema.tables where table_schema = ?', [schema])
     end
 
     # Returns all tables in schema 'doc'
     # @return [Array] Array of table names
     def tables
-      execute("select table_name from information_schema.tables where table_schema = '#{schema}'").map(&:first)
+      execute('select table_name from information_schema.tables where table_schema = ?', [schema]).map(&:first)
     end
 
     # Executes a SQL statement against the Crate HTTP REST endpoint.
@@ -181,8 +181,8 @@ module CrateRuby
     # @param [String] table_name Table name to get structure
     # @param [ResultSet]
     def table_structure(table_name)
-      execute("select * from information_schema.columns where table_schema = '#{schema}'" \
-              "AND table_name = '#{table_name}'")
+      execute('select * from information_schema.columns where table_schema = ?' \
+              'AND table_name = ?', [schema, table_name])
     end
 
     def insert(table_name, attributes)
