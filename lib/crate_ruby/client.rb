@@ -193,8 +193,9 @@ module CrateRuby
 
     def insert(table_name, attributes)
       vals = attributes.values
+      identifiers = attributes.keys.map {|v| %{"#{v}"} }.join(', ')
       binds = vals.count.times.map { |i| "$#{i + 1}" }.join(',')
-      stmt = %{INSERT INTO "#{table_name}" (#{attributes.keys.join(', ')}) VALUES(#{binds})}
+      stmt = %{INSERT INTO "#{table_name}" (#{identifiers}) VALUES(#{binds})}
       execute(stmt, vals)
     end
 
