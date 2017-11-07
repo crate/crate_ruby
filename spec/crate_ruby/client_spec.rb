@@ -174,6 +174,20 @@ describe CrateRuby::Client do
       end
     end
 
+    describe '#blob_tables' do
+      before do
+        client.create_blob_table 'pix'
+      end
+
+      after do
+        client.drop_table 'pix', true
+      end
+
+      it 'should return all user tables as an array of string values' do
+        client.blob_tables.should eq %w(pix)
+      end
+    end
+
     describe '#insert' do
       before do
         client.create_table('posts', id: [:string, 'primary key'],

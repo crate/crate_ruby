@@ -69,8 +69,8 @@ module CrateRuby
     #
     # client.create_blob_table("blob_table")
     def create_blob_table(name, shard_count = 5, replicas = 0)
-      stmt = 'create blob table ? clustered into ? shards with (number_of_replicas=?)'
-      execute stmt, [name, shard_count, replicas]
+      stmt = %{CREATE BLOB TABLE "#{name}" CLUSTERED INTO ? SHARDS WITH (number_of_replicas=?)}
+      execute stmt, [shard_count, replicas]
     end
 
     # Drop table
@@ -90,9 +90,15 @@ module CrateRuby
     end
 
     # Returns all tables in schema 'doc'
-    # @return [Array] Array of table names
+    # @return [Array<String>] Array of table names
     def tables
       execute('select table_name from information_schema.tables where table_schema = ?', [schema]).map(&:first)
+    end
+
+    # Returns all tables in schema 'blob'
+    # @return [Array<String>] Array of blob tables
+    def blob_tables
+      execute('select table_name from information_schema.tables where table_schema = ?', ['blob']).map(&:first)
     end
 
     # Executes a SQL statement against the Crate HTTP REST endpoint.
