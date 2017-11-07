@@ -1,4 +1,3 @@
-# -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -21,4 +20,24 @@
 
 require_relative '../lib/crate_ruby'
 require 'net/http'
+require_relative 'support/test_cluster'
 
+HOST = '127.0.0.1'.freeze
+PORT = 44_200
+
+RSpec.configure do |config|
+  config.before(:each) do
+  end
+  config.after(:each) do
+  end
+  config.before(:suite) do
+    @cluster = TestCluster.new(1, PORT)
+    @cluster.start_nodes
+  end
+  config.after(:suite) do
+    pid_file = File.join(__dir__, 'support/testnode.pid')
+    pid = File.read(pid_file)
+    File.delete(pid_file)
+    Process.kill('HUP', pid.to_i)
+  end
+end

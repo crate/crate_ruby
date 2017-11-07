@@ -82,6 +82,12 @@ Manipulate BLOBs like so::
     # deletion
     client.blob_delete(table_name, digest)
 
+Schema support
+
+    A default schema can be set by passing in the schema name
+
+    CrateRuby::Client.new(['localhost:44200'], schema: 'my_schema')
+
 Contributing
 ============
 

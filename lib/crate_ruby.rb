@@ -1,4 +1,3 @@
-# -*- coding: utf-8; -*-
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -19,16 +18,14 @@
 # with Crate these terms will supersede the license and you may use the
 # software solely pursuant to the terms of the relevant commercial agreement.
 
-require "crate_ruby/version"
-require "crate_ruby/error"
+require 'crate_ruby/version'
+require 'crate_ruby/error'
 require 'crate_ruby/result_set'
 require 'crate_ruby/client'
-require 'crate_ruby/utils'
 
 include CrateRuby
 
 module CrateRuby
-
   def self.logger
     @logger ||= begin
       require 'logger'
@@ -41,5 +38,4 @@ module CrateRuby
   def self.logger=(logger)
     @logger = logger
   end
-
 end
