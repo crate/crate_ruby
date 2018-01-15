@@ -24,7 +24,7 @@ require 'net/http'
 require 'zlib'
 
 class Bootstrap
-  VERSION = '2.1.8'.freeze
+  VERSION = '2.3.0'.freeze
 
   def initialize
     @fname = "crate-#{VERSION}.tar.gz"
