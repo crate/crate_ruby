@@ -20,13 +20,15 @@
 
 require 'json'
 require 'net/http'
+require 'base64'
+
 module CrateRuby
   # Client to interact with Crate.io DB
   class Client
     DEFAULT_HOST = '127.0.0.1'.freeze
     DEFAULT_PORT = '4200'.freeze
 
-    attr_accessor :logger, :schema
+    attr_accessor :logger, :schema, :username, :password
 
     # Currently only a single server is supported. Fail over will be implemented in upcoming versions
     # @param [Array] servers An Array of servers including ports [127.0.0.1:4200, 10.0.0.1:4201]
@@ -41,6 +43,8 @@ module CrateRuby
       @logger = opts[:logger] || CrateRuby.logger
       @http_options = opts[:http_options] || { read_timeout: 3600 }
       @schema = opts[:schema] || 'doc'
+      @username = opts[:username]
+      @password = opts[:password]
     end
 
     def inspect
@@ -230,7 +234,12 @@ module CrateRuby
     def headers
       header = { 'Content-Type' => 'application/json' }
       header['Default-Schema'] = schema if schema
+      header['Authorization'] =  "Basic #{encrypted_credentials}" if username && password
       header
+    end
+
+    def encrypted_credentials
+      @encrypted_credentials ||= Base64.encode64 "#{username}:#{password}"
     end
   end
 end
