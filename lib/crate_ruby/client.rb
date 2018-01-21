@@ -232,9 +232,10 @@ module CrateRuby
     end
 
     def headers
-      header = { 'Content-Type' => 'application/json' }
+      header = { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
       header['Default-Schema'] = schema if schema
-      header['Authorization'] =  "Basic #{encrypted_credentials}" if username && password
+      header['Authorization'] =  "Basic #{encrypted_credentials}" if username
+      header['X-User'] = username if username # for backwards compatibility with Crate 2.2
       header
     end
 
