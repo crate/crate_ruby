@@ -48,7 +48,7 @@ fi
 
 # get version from version.rb
 VERSION=$(grep "VERSION =" lib/crate_ruby/version.rb | \
-    cut -d' ' -f5 | tr -d "\'")
+    cut -d' ' -f5 | tr -d "\'" | sed -e "s/.freeze//")
 echo "Version: $VERSION"
 
 # check if tag to create has already been created
