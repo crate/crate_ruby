@@ -216,4 +216,37 @@ describe CrateRuby::Client do
       end
     end
   end
+
+  describe 'authentication' do
+    let(:username) { 'matz' }
+    let(:password) { 'ruby' }
+    let(:encrypted_credentials) { Base64.encode64 "#{username}:#{password}" }
+
+    describe 'with password' do
+      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username, password: password) }
+      it 'sets the basic auth header' do
+        headers = auth_client.send(:headers)
+        expect(headers['Authorization']).to eq "Basic #{encrypted_credentials}"
+      end
+    end
+
+    describe 'without password' do
+      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username) }
+      let(:enc_creds_wo_pwd) { Base64.encode64 "#{username}:" }
+
+      it 'sets and encodes auth header even without password' do
+        headers = auth_client.send(:headers)
+        expect(headers['Authorization']).to eq "Basic #{enc_creds_wo_pwd}"
+      end
+    end
+
+    describe 'X-User header' do
+      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username) }
+
+      it 'sets the X-User header' do
+        headers = auth_client.send(:headers)
+        expect(headers['X-User']).to eq username
+      end
+    end
+  end
 end

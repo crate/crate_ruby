@@ -84,9 +84,16 @@ Manipulate BLOBs like so::
 
 Schema support
 
-    A default schema can be set by passing in the schema name
+    A default schema can be set by passing in the schema name::
 
     CrateRuby::Client.new(['localhost:44200'], schema: 'my_schema')
+
+Authentication
+
+    Authentication credentials can be passed to the client if needed::
+
+    CrateRuby::Client.new(['localhost:44200'], username: 'foo', password: 'supersecret')
+
 
 Version matrix
 ==============
