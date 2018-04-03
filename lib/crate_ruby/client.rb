@@ -45,6 +45,7 @@ module CrateRuby
       @schema = opts[:schema] || 'doc'
       @username = opts[:username]
       @password = opts[:password]
+      @ssl = opts[:ssl] || false
     end
 
     def inspect
@@ -221,7 +222,7 @@ module CrateRuby
     def connection
       host, port = @servers.first.split(':')
       http = Net::HTTP.new(host, port)
-      http.use_ssl = true
+      http.use_ssl = true if @ssl
       return http
     end
 
