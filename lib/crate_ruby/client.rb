@@ -220,7 +220,9 @@ module CrateRuby
 
     def connection
       host, port = @servers.first.split(':')
-      Net::HTTP.new(host, port)
+      http = Net::HTTP.new(host, port)
+      http.use_ssl = true
+      return http
     end
 
     def request(req, http_options = {})
