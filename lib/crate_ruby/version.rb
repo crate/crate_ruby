@@ -19,5 +19,5 @@
 # software solely pursuant to the terms of the relevant commercial agreement.
 
 module CrateRuby
-  VERSION = '0.1.0'.freeze
+  VERSION = '0.2.0'.freeze
 end
