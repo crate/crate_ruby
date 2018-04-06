@@ -1,4 +1,7 @@
 # coding: UTF-8
+=== 0.2.0
+  * Added SSL support.
+
 === 0.1.0
   * HTTP Basic Authentication support that comes with 2.3.0
 
