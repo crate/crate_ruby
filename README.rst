@@ -118,8 +118,7 @@ Help
 
 Looking for more help?
 
-- Check `StackOverflow`_ for common problems
-- Chat with us on `Slack`_
+- Chat with us via our `support channel`_
 - Get `paid support`_
 
 .. _contribution docs: CONTRIBUTING.rst
@@ -128,5 +127,4 @@ Looking for more help?
 .. _developer docs: DEVELOP.rst
 .. _gem: https://rubygems.org/
 .. _paid support: https://crate.io/pricing/
-.. _Slack: https://crate.io/docs/support/slackin/
-.. _StackOverflow: https://stackoverflow.com/tags/crate
+.. _support channel: https://crate.io/support/
