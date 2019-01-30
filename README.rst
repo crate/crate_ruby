@@ -118,15 +118,11 @@ Help
 
 Looking for more help?
 
-- Check `StackOverflow`_ for common problems
-- Chat with us on `Slack`_
-- Get `paid support`_
+- Check out our `support channels`_
 
 .. _contribution docs: CONTRIBUTING.rst
 .. _Crate.io: https://crate.io
 .. _CrateDB: https://github.com/crate/crate
 .. _developer docs: DEVELOP.rst
 .. _gem: https://rubygems.org/
-.. _paid support: https://crate.io/pricing/
-.. _Slack: https://crate.io/docs/support/slackin/
-.. _StackOverflow: https://stackoverflow.com/tags/crate
+.. _support channels: https://crate.io/support/
