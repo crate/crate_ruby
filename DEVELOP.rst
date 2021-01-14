@@ -28,7 +28,7 @@ To create a new release, you must:
 
 - Commit your changes with a message like "prepare release x.y.z"
 
-- Push to ``origin/master``
+- Push to ``origin/main``
 
 - Create a tag by running ``./devtools/create_tag.sh``
 
