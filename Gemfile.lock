@@ -1,0 +1,36 @@
+PATH
+  remote: .
+  specs:
+    crate_ruby (0.2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    diff-lcs (1.4.4)
+    os (1.1.1)
+    rake (13.0.3)
+    rspec (3.10.0)
+      rspec-core (~> 3.10.0)
+      rspec-expectations (~> 3.10.0)
+      rspec-mocks (~> 3.10.0)
+    rspec-core (3.10.1)
+      rspec-support (~> 3.10.0)
+    rspec-expectations (3.10.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-mocks (3.10.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-support (3.10.1)
+
+PLATFORMS
+  x86_64-darwin-17
+
+DEPENDENCIES
+  crate_ruby!
+  os
+  rake
+  rspec (~> 3.10)
+
+BUNDLED WITH
+   2.2.3

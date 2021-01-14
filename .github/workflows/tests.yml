@@ -1,0 +1,52 @@
+name: Tests
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ] # , windows-latest ]
+        ruby-version: [ "2.3", "2.4", "2.5", "2.6", "2.7", "3.0" ]
+
+    name: Ruby ${{ matrix.ruby-version }} on OS ${{ matrix.os }}
+    steps:
+
+      - name: Acquire sources
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          architecture: x64
+
+      - name: Caching of CrateDB
+        uses: actions/cache@v2
+        id: cache-cratedb
+        with:
+          path: parts
+          key: cratedb-os=${{ matrix.os }}-${{ hashFiles('spec/bootstrap.rb') }}
+
+      - name: Caching of Ruby gems
+        uses: actions/cache@v2
+        id: cache-gems
+        with:
+          path: vendor/bundle
+          key: gems-os=${{ matrix.os }}-ruby=${{ matrix.ruby-version }}-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Bundle install
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install
+
+      - name: Install CrateDB
+        if: steps.cache-cratedb.outputs.cache-hit != 'true'
+        run: bundle exec ruby spec/bootstrap.rb
+
+      - name: Run tests
+        run: bundle exec rspec spec

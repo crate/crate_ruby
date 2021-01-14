@@ -5,11 +5,15 @@ Developer Guide
 Tests
 =====
 
-First, download and install CrateDB locally::
+First, download CrateDB::
 
-    $ ruby spec/bootstrap.rb
+    $ bundle exec ruby spec/bootstrap.rb
 
-Then, run tests like so::
+Install development dependencies::
+
+    $ bundle install
+
+Then, run tests::
 
     $ bundle exec rspec spec
 

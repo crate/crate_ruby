@@ -1,51 +1,66 @@
-===================
+###################
 CrateDB Ruby Client
-===================
+###################
 
-.. image:: https://badge.fury.io/rb/crate_ruby.svg
-   :target: http://badge.fury.io/rb/crate_ruby
-   :alt: Gem Version
-
-.. image:: https://travis-ci.org/crate/crate_ruby.svg?branch=master
-   :target: https://travis-ci.org/crate/crate_ruby
+.. image:: https://github.com/crate/crate_ruby/workflows/Tests/badge.svg
+   :target: https://github.com/crate/crate_ruby/actions?workflow=Tests
    :alt: Build Status
 
 .. image:: https://codeclimate.com/github/crate/crate_ruby.png
    :target: https://codeclimate.com/github/crate/crate_ruby
    :alt: Code Climate
 
+.. image:: https://badge.fury.io/rb/crate_ruby.svg
+   :target: https://rubygems.org/gems/crate_ruby
+   :alt: Gem Version
+
+.. image:: https://badgen.net/rubygems/dt/crate_ruby
+   :target: https://rubygems.org/gems/crate_ruby
+   :alt: Total downloads
+
+
 |
 
 A Ruby client library for CrateDB_.
 
+
+*************
 Prerequisites
-=============
+*************
 
 You will need Ruby 2.0 or greater.
 
+
+************
 Installation
-============
+************
 
 The CrateDB Ruby client is available as a Ruby gem_.
 
-Add this line to your application's ``Gemfile``::
+To use it, add this line to your application's ``Gemfile``::
 
     gem 'crate_ruby'
 
-Or, install it manually, like so::
+Or install it manually::
 
-    $ gem install crate_ruby
+    gem install crate_ruby
 
-Examples
-========
 
-Set up the client like so::
+********
+Synopsis
+********
+
+Set up the client.
+
+.. code:: ruby
 
     require 'crate_ruby'
 
     client = CrateRuby::Client.new
 
-Execute SQL queries like so::
+Execute SQL queries.
+
+.. code:: ruby
 
     result = client.execute("Select * from posts")
      => #<CrateRuby::ResultSet:0x00000002a9c5e8 @rowcount=1, @duration=5>
@@ -59,13 +74,19 @@ Execute SQL queries like so::
      => ["id", "my_column", "my_integer_col"]
 
 
-Perform parameter substitution like so::
+Perform parameter substitution.
+
+.. code:: ruby
 
      client.execute(
          "INSERT INTO posts (id, title, tags) VALUES (\$1, \$2, \$3)",
          [1, "My life with crate", ['awesome', 'cool']])
 
-Manipulate BLOBs like so::
+Manipulate BLOBs.
+
+.. code:: ruby
+
+    require 'digest'
 
     digest = Digest::SHA1.file(file_path).hexdigest
 
@@ -82,46 +103,45 @@ Manipulate BLOBs like so::
     # deletion
     client.blob_delete(table_name, digest)
 
-Schema support
+A default schema can be set by passing in the schema name.
 
-    A default schema can be set by passing in the schema name::
+.. code:: ruby
 
-    CrateRuby::Client.new(['localhost:44200'], schema: 'my_schema')
+    CrateRuby::Client.new(['localhost:4200'], schema: 'my_schema')
 
-Authentication
+Authentication credentials can be passed to the client if needed.
 
-    Authentication credentials can be passed to the client if needed::
+.. code:: ruby
 
-    CrateRuby::Client.new(['localhost:44200'], username: 'foo', password: 'supersecret')
+    CrateRuby::Client.new(['localhost:4200'], username: 'foo', password: 'supersecret')
+
+SSL can be enabled.
+
+.. code:: ruby
+
+    CrateRuby::Client.new(['localhost:4200'], ssl: true)
 
 
-Version matrix
-==============
-+--------------+------------+
-| Crate Ruby   | CrateDB    |
-+==============+============+
-| < 0.9        | < 0.57     |
-+--------------+------------+
-| 0.9          | >= 0.57    |
-+--------------+------------+
-
+************
 Contributing
-============
+************
 
-This project is primarily maintained by Crate.io_, but we welcome community
-contributions!
+This project is primarily maintained by `Crate.IO GmbH`_,
+but we welcome community contributions!
 
 See the `developer docs`_ and the `contribution docs`_ for more information.
 
+
+****
 Help
-====
+****
 
 Looking for more help?
 
 - Check out our `support channels`_
 
 .. _contribution docs: CONTRIBUTING.rst
-.. _Crate.io: https://crate.io
+.. _Crate.IO GmbH: https://crate.io
 .. _CrateDB: https://github.com/crate/crate
 .. _developer docs: DEVELOP.rst
 .. _gem: https://rubygems.org/

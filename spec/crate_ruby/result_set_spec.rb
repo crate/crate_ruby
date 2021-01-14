@@ -31,41 +31,41 @@ describe ResultSet do
 
   describe '#initialize' do
     it 'should set rowcount' do
-      result_set.rowcount.should eq 1
+      expect(result_set.rowcount).to eq 1
     end
 
     it 'should set duration' do
-      result_set.duration.should eq 4
+      expect(result_set.duration).to eq 4
     end
 
     it 'should set cols' do
-      result_set.cols.should eq json_result['cols']
+      expect(result_set.cols).to eq json_result['cols']
     end
 
     it 'should parse an array column result into an Array' do
       res = ResultSet.new(result_with_array_col)
-      res[0][1].should be_a(Array)
-      res[0][1].should eq(%w[awesome freaky])
+      expect(res[0][1]).to be_a(Array)
+      expect(res[0][1]).to eq(%w[awesome freaky])
     end
 
     it 'should parse an object column result into an Object' do
       res = ResultSet.new(result_with_object)
-      res[0][0].should be_a(Hash)
-      res[0][0].should eq('street' => '1010 W 2nd Ave', 'city' => 'Vancouver')
+      expect(res[0][0]).to be_a(Hash)
+      expect(res[0][0]).to eq('street' => '1010 W 2nd Ave', 'city' => 'Vancouver')
     end
   end
 
   describe '#each' do
     it 'should loop over the result rows' do
       result_set.each_with_index do |r, i|
-        r.should eq json_result['rows'][i]
+        expect(r).to eq json_result['rows'][i]
       end
     end
   end
 
   describe '#[]' do
     it 'should return the row at index' do
-      result_set[1][0].should eq('Bar')
+      expect(result_set[1][0]).to eq('Bar')
     end
   end
 
@@ -75,7 +75,7 @@ describe ResultSet do
       result_set.select_columns(['my_column']) do |res|
         a << res
       end
-      a.should eq [['Foo'], ['Bar']]
+      expect(a).to eq [['Foo'], ['Bar']]
     end
     it 'should not raise error on invalid column name' do
       expect do
@@ -87,7 +87,7 @@ describe ResultSet do
 
   describe '#values' do
     it 'should return all rows as an array of arrays' do
-      result_set.values.should eq json_result['rows']
+      expect(result_set.values).to eq json_result['rows']
     end
   end
 end

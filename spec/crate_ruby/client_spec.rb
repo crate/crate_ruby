@@ -20,6 +20,7 @@
 
 require_relative '../spec_helper'
 require 'securerandom'
+require 'digest'
 
 describe CrateRuby::Client do
   let(:client) { CrateRuby::Client.new(['localhost:44200']) }
@@ -46,14 +47,14 @@ describe CrateRuby::Client do
         context 'file' do
           it 'should upload a file to the blob table' do
             f = File.read(file_path)
-            client.blob_put(@blob_table, digest, f).should be_truthy
+            expect(client.blob_put(@blob_table, digest, f)).to be_truthy
           end
         end
         context '#string' do
           let(:string) { 'my crazy' }
           let(:digest) { Digest::SHA1.hexdigest(string) }
           it 'should upload a string to the blob table' do
-            client.blob_put(@blob_table, digest, string).should be_truthy
+            expect(client.blob_put(@blob_table, digest, string)).to be_truthy
           end
         end
       end
@@ -65,7 +66,7 @@ describe CrateRuby::Client do
         end
         it 'should download a blob' do
           data = client.blob_get(@blob_table, digest)
-          data.should_not be_falsey
+          expect(data).to be_truthy
           open(store_location, 'wb') do |file|
             file.write(data)
           end
@@ -96,11 +97,11 @@ describe CrateRuby::Client do
       end
 
       it 'should allow parameters' do
-        client.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
-                       [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
-                        %w[awesome freaky]]).should be_truthy
+        expect(client.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
+                              [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
+                              %w[awesome freaky]])).to be_truthy
         client.refresh_table table_name
-        client.execute("select * from #{table_name}").rowcount.should eq(1)
+        expect(client.execute("select * from #{table_name}").rowcount).to eq(1)
       end
 
       it 'should allow bulk parameters' do
@@ -108,11 +109,11 @@ describe CrateRuby::Client do
           [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'New York' }, %w[foo bar]],
           [2, 'Post 2', { street: '1010 W 2nd Ave', city: 'San Fran' }, []]
         ]
-        client.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
-                       nil, bulk_args).should be_truthy
+        expect(client.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
+                              nil, bulk_args)).to be_truthy
         client.refresh_table table_name
-        client.execute("select * from #{table_name}").rowcount.should eq(2)
-        client.execute("select count(*) from #{table_name}")[0][0].should eq(2)
+        expect(client.execute("select * from #{table_name}").rowcount).to eq(2)
+        expect(client.execute("select count(*) from #{table_name}")[0][0]).to eq(2)
       end
 
       it 'should accept http options' do
@@ -130,12 +131,12 @@ describe CrateRuby::Client do
         after { client_w_schema.execute("drop table #{table_name}") }
 
         it 'should allow parameters' do
-          client_w_schema.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
-                                  [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
-                                   %w[awesome freaky]]).should be_truthy
+          expect(client_w_schema.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
+                                         [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
+                                         %w[awesome freaky]])).to be_truthy
           client_w_schema.refresh_table table_name
-          client.execute("select * from #{table_name}").rowcount.should_not eq(1)
-          client_w_schema.execute("select * from #{table_name}").rowcount.should eq(1)
+          expect(client.execute("select * from #{table_name}").rowcount).not_to eq(1)
+          expect(client_w_schema.execute("select * from #{table_name}").rowcount).to eq(1)
         end
       end
     end
@@ -144,16 +145,16 @@ describe CrateRuby::Client do
       it 'should use host and ports parameters' do
         logger = double
         client = CrateRuby::Client.new ['10.0.0.1:4200'], logger: logger
-        client.instance_variable_get(:@servers).should eq(['10.0.0.1:4200'])
+        expect(client.instance_variable_get(:@servers)).to eq(['10.0.0.1:4200'])
       end
       it 'should use default request parameters' do
         client = CrateRuby::Client.new
-        client.instance_variable_get(:@http_options).should eq(read_timeout: 3600)
+        expect(client.instance_variable_get(:@http_options)).to eq(read_timeout: 3600)
       end
       it 'should use request parameters' do
         client = CrateRuby::Client.new ['10.0.0.1:4200'],
                                        http_options: { read_timeout: 60 }
-        client.instance_variable_get(:@http_options).should eq(read_timeout: 60)
+        expect(client.instance_variable_get(:@http_options)).to eq(read_timeout: 60)
       end
     end
 
@@ -170,7 +171,7 @@ describe CrateRuby::Client do
       end
 
       it 'should return all user tables as an array of string values' do
-        client.tables.should eq %w[comments posts]
+        expect(client.tables).to eq %w[comments posts]
       end
     end
 
@@ -184,7 +185,7 @@ describe CrateRuby::Client do
       end
 
       it 'should return all user tables as an array of string values' do
-        client.blob_tables.should eq %w(pix)
+        expect(client.blob_tables).to eq %w(pix)
       end
     end
 
@@ -204,14 +205,14 @@ describe CrateRuby::Client do
           client.insert('posts', id: id, title: 'Test')
           client.refresh_table('posts')
           result_set = client.execute("Select * from posts where id = '#{id}'")
-          result_set.rowcount.should eq 1
+          expect(result_set.rowcount).to eq 1
         end.not_to raise_exception
       end
     end
 
     describe '#refresh table' do
       it 'should issue the proper refresh statment' do
-        client.should_receive(:execute).with('refresh table posts')
+        expect(client).to receive(:execute).with('refresh table posts')
         client.refresh_table('posts')
       end
     end
