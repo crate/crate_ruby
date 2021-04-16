@@ -15,7 +15,7 @@ Install development dependencies::
 
 Then, run tests::
 
-    $ bundle exec rspec spec
+    $ bundle exec rspec
 
 Preparing a Release
 ===================
