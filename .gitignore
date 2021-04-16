@@ -18,6 +18,7 @@ tmp
 .rvmrc
 log/crate.log
 crate_test_server.*
+crate-*.tar.gz
 parts/
 
 .byebug_history
