@@ -29,7 +29,7 @@ require 'rubygems/package'
 require 'zlib'
 
 class Bootstrap
-  VERSION = '4.3.2'
+  VERSION = '4.5.0'
 
   def initialize
     @fname = "crate-#{VERSION}.tar.gz"
