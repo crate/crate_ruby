@@ -1,4 +1,5 @@
-# coding: utf-8
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -19,30 +20,30 @@
 # with Crate these terms will supersede the license and you may use the
 # software solely pursuant to the terms of the relevant commercial agreement.
 
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'crate_ruby/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "crate_ruby"
+  spec.name          = 'crate_ruby'
   spec.version       = CrateRuby::VERSION
-  spec.authors       = ["Christoph Klocker", "CRATE Technology GmbH"]
-  spec.email         = ["office@crate.io"]
-  spec.summary       = "A simple interface for the Crate.IO database."
-  spec.description   = "A Ruby interface for Crate.IO. Put your data to work. Simply."
-  spec.homepage      = "http://crate.io"
-  spec.license       = "Apache-2.0"
+  spec.authors       = ['Christoph Klocker', 'CRATE Technology GmbH']
+  spec.email         = ['office@crate.io']
+  spec.summary       = 'A simple interface for the Crate.IO database.'
+  spec.description   = 'A Ruby interface for Crate.IO. Put your data to work. Simply.'
+  spec.homepage      = 'http://crate.io'
+  spec.license       = 'Apache-2.0'
   spec.required_ruby_version = '>= 2.6'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
-  spec.add_development_dependency "rubocop"
-  spec.add_development_dependency "rubocop-rspec"
-  spec.add_development_dependency "rubocop-rake"
-  spec.add_development_dependency "os"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec", "~> 3.10"
+  spec.add_development_dependency 'os'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec', '~> 3.10'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-rake'
+  spec.add_development_dependency 'rubocop-rspec'
 end

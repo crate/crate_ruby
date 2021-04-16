@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -21,9 +23,15 @@
 require_relative '../spec_helper'
 
 describe ResultSet do
-  let(:crate_result) { '{"cols":["my_column","my_integer_col"],"rows":[["Foo",5],["Bar",5]],"rowcount":1,"duration":4}' }
-  let(:result_with_array_col) { %({"cols":["id","tags","title"],"rows":[[1,["awesome","freaky"],"My life with crate"]],"rowcount":1,"duration":2}) }
-  let(:result_with_object) { %({"cols":["address","id","name"],"rows":[[{"street":"1010 W 2nd Ave","city":"Vancouver"},"fb7183ac-d049-462c-85a9-732aca59a1c1","Mad Max"]],"rowcount":1,"duration":3}) }
+  let(:crate_result) do
+    '{"cols":["my_column","my_integer_col"],"rows":[["Foo",5],["Bar",5]],"rowcount":1,"duration":4}'
+  end
+  let(:result_with_array_col) do
+    %({"cols":["id","tags","title"],"rows":[[1,["awesome","freaky"],"My life with crate"]],"rowcount":1,"duration":2})
+  end
+  let(:result_with_object) do
+    %({"cols":["address","id","name"],"rows":[[{"street":"1010 W 2nd Ave","city":"Vancouver"},"fb7183ac-d049-462c-85a9-732aca59a1c1","Mad Max"]],"rowcount":1,"duration":3})
+  end
 
   let(:result_set) { ResultSet.new(crate_result) }
 

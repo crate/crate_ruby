@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -50,10 +52,10 @@ class TestServer
     @http_port = http_port
 
     @crate_bin = File.join('parts', 'crate', 'bin', 'crate')
-    unless File.file?(@crate_bin)
-      puts "Crate is not available. Please run 'bundle exec ruby spec/bootstrap.rb' first."
-      exit 1
-    end
+    return if File.file?(@crate_bin)
+
+    puts "Crate is not available. Please run 'bundle exec ruby spec/bootstrap.rb' first."
+    exit 1
   end
 
   def start
@@ -62,7 +64,7 @@ class TestServer
     wait_for
     Process.detach(@pid)
 
-    File.write(__dir__ + '/testnode.pid', @pid)
+    File.write("#{__dir__}/testnode.pid", @pid)
   end
 
   def wait_for
@@ -73,12 +75,10 @@ class TestServer
         puts "Crate hasn't started for #{STARTUP_TIMEOUT} seconds. Giving up now..."
         exit 1
       end
-      if alive?
-        break
-      else
-        sleep(interval)
-        time_slept += interval
-      end
+      break if alive?
+
+      sleep(interval)
+      time_slept += interval
     end
   end
 

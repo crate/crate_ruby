@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -29,7 +31,7 @@ module CrateRuby
   def self.logger
     @logger ||= begin
       require 'logger'
-      log = Logger.new(STDERR)
+      log = Logger.new($stderr)
       log.level = Logger::INFO
       log
     end
