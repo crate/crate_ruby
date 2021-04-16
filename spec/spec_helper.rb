@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -22,7 +24,7 @@ require_relative '../lib/crate_ruby'
 require 'net/http'
 require_relative 'support/test_cluster'
 
-HOST = '127.0.0.1'.freeze
+HOST = '127.0.0.1'
 PORT = 44_200
 
 RSpec.configure do |config|

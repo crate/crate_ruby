@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -19,5 +21,5 @@
 # software solely pursuant to the terms of the relevant commercial agreement.
 
 module CrateRuby
-  VERSION = '0.2.0'.freeze
+  VERSION = '0.2.0'
 end

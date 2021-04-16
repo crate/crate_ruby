@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -99,7 +101,7 @@ describe CrateRuby::Client do
       it 'should allow parameters' do
         expect(client.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
                               [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
-                              %w[awesome freaky]])).to be_truthy
+                               %w[awesome freaky]])).to be_truthy
         client.refresh_table table_name
         expect(client.execute("select * from #{table_name}").rowcount).to eq(1)
       end
@@ -133,7 +135,7 @@ describe CrateRuby::Client do
         it 'should allow parameters' do
           expect(client_w_schema.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
                                          [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
-                                         %w[awesome freaky]])).to be_truthy
+                                          %w[awesome freaky]])).to be_truthy
           client_w_schema.refresh_table table_name
           expect(client.execute("select * from #{table_name}").rowcount).not_to eq(1)
           expect(client_w_schema.execute("select * from #{table_name}").rowcount).to eq(1)
@@ -185,7 +187,7 @@ describe CrateRuby::Client do
       end
 
       it 'should return all user tables as an array of string values' do
-        expect(client.blob_tables).to eq %w(pix)
+        expect(client.blob_tables).to eq %w[pix]
       end
     end
 

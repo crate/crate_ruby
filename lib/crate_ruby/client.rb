@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -25,8 +27,8 @@ require 'base64'
 module CrateRuby
   # Client to interact with Crate.io DB
   class Client
-    DEFAULT_HOST = '127.0.0.1'.freeze
-    DEFAULT_PORT = '4200'.freeze
+    DEFAULT_HOST = '127.0.0.1'
+    DEFAULT_PORT = '4200'
 
     attr_accessor :logger, :schema, :username, :password
 
@@ -198,7 +200,7 @@ module CrateRuby
 
     def insert(table_name, attributes)
       vals = attributes.values
-      identifiers = attributes.keys.map {|v| %{"#{v}"} }.join(', ')
+      identifiers = attributes.keys.map { |v| %("#{v}") }.join(', ')
       binds = vals.count.times.map { |i| "$#{i + 1}" }.join(',')
       stmt = %{INSERT INTO "#{table_name}" (#{identifiers}) VALUES(#{binds})}
       execute(stmt, vals)
@@ -223,7 +225,7 @@ module CrateRuby
       host, port = @servers.first.split(':')
       http = Net::HTTP.new(host, port)
       http.use_ssl = true if @ssl
-      return http
+      http
     end
 
     def request(req, http_options = {})

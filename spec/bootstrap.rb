@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -27,25 +29,25 @@ require 'rubygems/package'
 require 'zlib'
 
 class Bootstrap
-  VERSION = '4.3.2'.freeze
+  VERSION = '4.3.2'
 
   def initialize
     @fname = "crate-#{VERSION}.tar.gz"
-    @crate_bin = File.join('parts', 'crate' 'bin', 'crate')
+    @crate_bin = File.join('parts', 'crate', 'bin', 'crate')
   end
 
   def run
-    unless File.file?(@crate_bin)
-      download unless File.file?(@fname)
-      extract
-    end
+    return if File.file?(@crate_bin)
+
+    download unless File.file?(@fname)
+    extract
   end
 
   def download
     if OS.linux?
-      baseurl = "https://cdn.crate.io/downloads/releases/cratedb/x64_linux"
+      baseurl = 'https://cdn.crate.io/downloads/releases/cratedb/x64_linux'
     elsif OS.mac?
-      baseurl = "https://cdn.crate.io/downloads/releases/cratedb/x64_mac"
+      baseurl = 'https://cdn.crate.io/downloads/releases/cratedb/x64_mac'
     else
       raise "Operating system '#{RbConfig::CONFIG['host_os']}' not supported"
     end
@@ -64,7 +66,7 @@ class Bootstrap
     tar_extract = Gem::Package::TarReader.new(Zlib::GzipReader.open(@fname))
     tar_extract.rewind # The extract has to be rewinded after every iteration
     tar_extract.each do |entry|
-      dest_file = File.join 'parts', entry.full_name.gsub(/^(crate)(\-\d+\.\d+\.\d+)(.*)/, '\1\3')
+      dest_file = File.join 'parts', entry.full_name.gsub(/^(crate)(-\d+\.\d+\.\d+)(.*)/, '\1\3')
       puts dest_file
       if entry.directory?
         FileUtils.mkdir_p dest_file
@@ -80,11 +82,10 @@ class Bootstrap
 
     # Fix bundled Java for macOS builds to have executable permissions.
     if OS.linux?
-      FileUtils.chmod "+x", "parts/crate/jdk/bin/java"
+      FileUtils.chmod '+x', 'parts/crate/jdk/bin/java'
     elsif OS.mac?
-      FileUtils.chmod "+x", "parts/crate/jdk/Contents/Home/bin/java"
+      FileUtils.chmod '+x', 'parts/crate/jdk/Contents/Home/bin/java'
     end
-
   end
 end
 
