@@ -20,14 +20,12 @@
 # with Crate these terms will supersede the license and you may use the
 # software solely pursuant to the terms of the relevant commercial agreement.
 
-require 'crate_ruby/version'
-require 'crate_ruby/error'
-require 'crate_ruby/result_set'
-require 'crate_ruby/client'
-
-include CrateRuby
-
 module CrateRuby
+  require 'crate_ruby/version'
+  require 'crate_ruby/error'
+  require 'crate_ruby/result_set'
+  require 'crate_ruby/client'
+
   def self.logger
     @logger ||= begin
       require 'logger'
