@@ -11,6 +11,7 @@ lib/bundler/man
 pkg
 rdoc
 spec/reports
+spec/support/testnode.pid
 test/tmp
 test/version_tmp
 tmp
