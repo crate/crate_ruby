@@ -28,14 +28,11 @@ HOST = '127.0.0.1'
 PORT = 44_200
 
 RSpec.configure do |config|
-  config.before(:each) do
-  end
-  config.after(:each) do
-  end
   config.before(:suite) do
     @cluster = TestCluster.new(1, PORT)
     @cluster.start_nodes
   end
+
   config.after(:suite) do
     pid_file = File.join(__dir__, 'support/testnode.pid')
     pid = File.read(pid_file)

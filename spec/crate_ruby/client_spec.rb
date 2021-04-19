@@ -47,15 +47,17 @@ describe CrateRuby::Client do
 
       describe '#blob_put' do
         context 'file' do
-          it 'should upload a file to the blob table' do
+          it 'uploads a file to the blob table' do
             f = File.read(file_path)
             expect(client.blob_put(@blob_table, digest, f)).to be_truthy
           end
         end
+
         context '#string' do
           let(:string) { 'my crazy' }
           let(:digest) { Digest::SHA1.hexdigest(string) }
-          it 'should upload a string to the blob table' do
+
+          it 'uploads a string to a blob table' do
             expect(client.blob_put(@blob_table, digest, string)).to be_truthy
           end
         end
@@ -66,10 +68,11 @@ describe CrateRuby::Client do
           f = File.read(file_path)
           client.blob_put(@blob_table, digest, f)
         end
-        it 'should download a blob' do
+
+        it 'downloads a blob' do
           data = client.blob_get(@blob_table, digest)
           expect(data).to be_truthy
-          open(store_location, 'wb') do |file|
+          File.open(store_location, 'wb') do |file|
             file.write(data)
           end
         end
@@ -80,7 +83,8 @@ describe CrateRuby::Client do
           f = File.read(file_path)
           client.blob_put(@blob_table, digest, f)
         end
-        it 'should delete a blob' do
+
+        it 'deletes a blob' do
           client.blob_delete(@blob_table, digest)
         end
       end
@@ -98,7 +102,7 @@ describe CrateRuby::Client do
         client.execute("drop table #{table_name}")
       end
 
-      it 'should allow parameters' do
+      it 'allows parameters' do
         expect(client.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
                               [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
                                %w[awesome freaky]])).to be_truthy
@@ -106,7 +110,7 @@ describe CrateRuby::Client do
         expect(client.execute("select * from #{table_name}").rowcount).to eq(1)
       end
 
-      it 'should allow bulk parameters' do
+      it 'allows bulk parameters' do
         bulk_args = [
           [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'New York' }, %w[foo bar]],
           [2, 'Post 2', { street: '1010 W 2nd Ave', city: 'San Fran' }, []]
@@ -118,7 +122,7 @@ describe CrateRuby::Client do
         expect(client.execute("select count(*) from #{table_name}")[0][0]).to eq(2)
       end
 
-      it 'should accept http options' do
+      it 'accepts http options' do
         expect do
           client.execute("select * from #{table_name}", nil, nil,
                          'read_timeout' => 0)
@@ -132,7 +136,7 @@ describe CrateRuby::Client do
         end
         after { client_w_schema.execute("drop table #{table_name}") }
 
-        it 'should allow parameters' do
+        it 'allows parameters' do
           expect(client_w_schema.execute("insert into #{table_name} (id, name, address, tags) VALUES (?, ?, ?, ?)",
                                          [1, 'Post 1', { street: '1010 W 2nd Ave', city: 'Vancouver' },
                                           %w[awesome freaky]])).to be_truthy
@@ -144,16 +148,18 @@ describe CrateRuby::Client do
     end
 
     describe '#initialize' do
-      it 'should use host and ports parameters' do
+      it 'uses host and ports parameters' do
         logger = double
         client = CrateRuby::Client.new ['10.0.0.1:4200'], logger: logger
         expect(client.instance_variable_get(:@servers)).to eq(['10.0.0.1:4200'])
       end
-      it 'should use default request parameters' do
+
+      it 'uses default request parameters' do
         client = CrateRuby::Client.new
         expect(client.instance_variable_get(:@http_options)).to eq(read_timeout: 3600)
       end
-      it 'should use request parameters' do
+
+      it 'uses request parameters' do
         client = CrateRuby::Client.new ['10.0.0.1:4200'],
                                        http_options: { read_timeout: 60 }
         expect(client.instance_variable_get(:@http_options)).to eq(read_timeout: 60)
@@ -172,7 +178,7 @@ describe CrateRuby::Client do
         end
       end
 
-      it 'should return all user tables as an array of string values' do
+      it 'returns all user tables as an array of string values' do
         expect(client.tables).to eq %w[comments posts]
       end
     end
@@ -186,7 +192,7 @@ describe CrateRuby::Client do
         client.drop_table 'pix', true
       end
 
-      it 'should return all user tables as an array of string values' do
+      it 'returns all user tables as an array of string values' do
         expect(client.blob_tables).to eq %w[pix]
       end
     end
@@ -201,7 +207,7 @@ describe CrateRuby::Client do
         client.drop_table 'posts'
       end
 
-      it 'should insert the record' do
+      it 'inserts the record' do
         expect do
           id = SecureRandom.uuid
           client.insert('posts', id: id, title: 'Test')
@@ -213,7 +219,7 @@ describe CrateRuby::Client do
     end
 
     describe '#refresh table' do
-      it 'should issue the proper refresh statment' do
+      it 'issues the proper refresh statment' do
         expect(client).to receive(:execute).with('refresh table posts')
         client.refresh_table('posts')
       end
@@ -227,6 +233,7 @@ describe CrateRuby::Client do
 
     describe 'with password' do
       let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username, password: password) }
+
       it 'sets the basic auth header' do
         headers = auth_client.send(:headers)
         expect(headers['Authorization']).to eq "Basic #{encrypted_credentials}"

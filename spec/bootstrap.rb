@@ -51,12 +51,14 @@ class Bootstrap
     else
       raise "Operating system '#{RbConfig::CONFIG['host_os']}' not supported"
     end
+
     uri = URI("#{baseurl}/#{@fname}")
     puts "Downloading Crate from #{uri} ..."
+
     Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
       request = Net::HTTP::Get.new uri
       resp = http.request request
-      open(@fname, 'wb') do |file|
+      File.open(@fname, 'wb') do |file|
         file.write(resp.body)
       end
     end
@@ -68,6 +70,7 @@ class Bootstrap
     tar_extract.each do |entry|
       dest_file = File.join 'parts', entry.full_name.gsub(/^(crate)(-\d+\.\d+\.\d+)(.*)/, '\1\3')
       puts dest_file
+
       if entry.directory?
         FileUtils.mkdir_p dest_file
       else
