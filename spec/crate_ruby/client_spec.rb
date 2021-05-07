@@ -25,8 +25,8 @@ require 'securerandom'
 require 'digest'
 
 describe CrateRuby::Client do
-  let(:client) { CrateRuby::Client.new(['localhost:44200']) }
-  let(:client_w_schema) { CrateRuby::Client.new(['localhost:44200'], schema: 'custom') }
+  let(:client) { described_class.new(['localhost:44200']) }
+  let(:client_w_schema) { described_class.new(['localhost:44200'], schema: 'custom') }
 
   describe '#create_table' do
     describe 'blob management' do
@@ -35,30 +35,30 @@ describe CrateRuby::Client do
       let(:file_path) { File.join(path, file) }
       let(:digest) { Digest::SHA1.file(file_path).hexdigest }
       let(:store_location) { File.join(path, "get_#{file}") }
+      let(:blob_table) { 'my_blobs' }
 
       before do
-        @blob_table = 'my_blobs'
-        client.execute("create blob table #{@blob_table} clustered into 1 shards with (number_of_replicas=0)")
+        client.execute("create blob table #{blob_table} clustered into 1 shards with (number_of_replicas=0)")
       end
 
       after do
-        client.execute("drop blob table #{@blob_table}")
+        client.execute("drop blob table #{blob_table}")
       end
 
       describe '#blob_put' do
-        context 'file' do
-          it 'uploads a file to the blob table' do
+        context 'when uploading a file' do
+          it 'is saved to a blob table' do
             f = File.read(file_path)
-            expect(client.blob_put(@blob_table, digest, f)).to be_truthy
+            expect(client.blob_put(blob_table, digest, f)).to be_truthy
           end
         end
 
-        context '#string' do
+        describe '#string' do
           let(:string) { 'my crazy' }
           let(:digest) { Digest::SHA1.hexdigest(string) }
 
           it 'uploads a string to a blob table' do
-            expect(client.blob_put(@blob_table, digest, string)).to be_truthy
+            expect(client.blob_put(blob_table, digest, string)).to be_truthy
           end
         end
       end
@@ -66,11 +66,11 @@ describe CrateRuby::Client do
       describe '#blob_get' do
         before do
           f = File.read(file_path)
-          client.blob_put(@blob_table, digest, f)
+          client.blob_put(blob_table, digest, f)
         end
 
         it 'downloads a blob' do
-          data = client.blob_get(@blob_table, digest)
+          data = client.blob_get(blob_table, digest)
           expect(data).to be_truthy
           File.open(store_location, 'wb') do |file|
             file.write(data)
@@ -81,11 +81,11 @@ describe CrateRuby::Client do
       describe '#blob_delete' do
         before do
           f = File.read(file_path)
-          client.blob_put(@blob_table, digest, f)
+          client.blob_put(blob_table, digest, f)
         end
 
         it 'deletes a blob' do
-          client.blob_delete(@blob_table, digest)
+          client.blob_delete(blob_table, digest)
         end
       end
     end
@@ -134,6 +134,7 @@ describe CrateRuby::Client do
           client_w_schema.execute("create table #{table_name} \n
                  (id integer primary key, name string, address object, tags array(string)) ")
         end
+
         after { client_w_schema.execute("drop table #{table_name}") }
 
         it 'allows parameters' do
@@ -150,18 +151,18 @@ describe CrateRuby::Client do
     describe '#initialize' do
       it 'uses host and ports parameters' do
         logger = double
-        client = CrateRuby::Client.new ['10.0.0.1:4200'], logger: logger
+        client = described_class.new ['10.0.0.1:4200'], logger: logger
         expect(client.instance_variable_get(:@servers)).to eq(['10.0.0.1:4200'])
       end
 
       it 'uses default request parameters' do
-        client = CrateRuby::Client.new
+        client = described_class.new
         expect(client.instance_variable_get(:@http_options)).to eq(read_timeout: 3600)
       end
 
       it 'uses request parameters' do
-        client = CrateRuby::Client.new ['10.0.0.1:4200'],
-                                       http_options: { read_timeout: 60 }
+        client = described_class.new ['10.0.0.1:4200'],
+                                     http_options: { read_timeout: 60 }
         expect(client.instance_variable_get(:@http_options)).to eq(read_timeout: 60)
       end
     end
@@ -232,7 +233,7 @@ describe CrateRuby::Client do
     let(:encrypted_credentials) { Base64.strict_encode64 "#{username}:#{password}" }
 
     describe 'with password' do
-      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username, password: password) }
+      let(:auth_client) { described_class.new(['localhost:44200'], username: username, password: password) }
 
       it 'sets the basic auth header' do
         headers = auth_client.send(:headers)
@@ -241,7 +242,7 @@ describe CrateRuby::Client do
     end
 
     describe 'without password' do
-      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username) }
+      let(:auth_client) { described_class.new(['localhost:44200'], username: username) }
       let(:enc_creds_wo_pwd) { Base64.strict_encode64 "#{username}:" }
 
       it 'sets and encodes auth header even without password' do
@@ -252,7 +253,7 @@ describe CrateRuby::Client do
 
     describe 'with a long password' do
       let(:password) { 'this password is long and would cause Base64 wrapping' }
-      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username, password: password) }
+      let(:auth_client) { described_class.new(['localhost:44200'], username: username, password: password) }
 
       it 'encodes the basic auth header correctly' do
         headers = auth_client.send(:headers)
@@ -262,7 +263,7 @@ describe CrateRuby::Client do
     end
 
     describe 'X-User header' do
-      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username) }
+      let(:auth_client) { described_class.new(['localhost:44200'], username: username) }
 
       it 'sets the X-User header' do
         headers = auth_client.send(:headers)
