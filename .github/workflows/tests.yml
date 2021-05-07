@@ -49,4 +49,7 @@ jobs:
         run: bundle exec ruby spec/bootstrap.rb
 
       - name: Run tests
-        run: bundle exec rspec spec
+        run: bundle exec rspec
+
+      - name: Run rubocop
+        run: bundle exec rubocop
