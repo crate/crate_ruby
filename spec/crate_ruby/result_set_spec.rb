@@ -32,7 +32,7 @@ describe CrateRuby::ResultSet do
   let(:result_with_object) do
     %({"cols":["address","id","name"],"rows":[[{"street":"1010 W 2nd Ave","city":"Vancouver"},"fb7183ac-d049-462c-85a9-732aca59a1c1","Mad Max"]],"rowcount":1,"duration":3})
   end
-  let(:result_set) { CrateRuby::ResultSet.new(crate_result) }
+  let(:result_set) { described_class.new(crate_result) }
   let(:json_result) { JSON.parse crate_result }
 
   describe '#initialize' do
@@ -49,13 +49,13 @@ describe CrateRuby::ResultSet do
     end
 
     it 'parses an array column result into an Array' do
-      res = CrateRuby::ResultSet.new(result_with_array_col)
+      res = described_class.new(result_with_array_col)
       expect(res[0][1]).to be_a(Array)
       expect(res[0][1]).to eq(%w[awesome freaky])
     end
 
     it 'parses an object column result into an Object' do
-      res = CrateRuby::ResultSet.new(result_with_object)
+      res = described_class.new(result_with_object)
       expect(res[0][0]).to be_a(Hash)
       expect(res[0][0]).to eq('street' => '1010 W 2nd Ave', 'city' => 'Vancouver')
     end
@@ -88,7 +88,7 @@ describe CrateRuby::ResultSet do
       expect do
         result_set.select_columns(%w[my_column invalid]) do |row|
         end
-      end.to_not raise_error
+      end.not_to raise_error
     end
   end
 

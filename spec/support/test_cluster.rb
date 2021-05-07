@@ -54,7 +54,7 @@ class TestServer
     @crate_bin = File.join('parts', 'crate', 'bin', 'crate')
     return if File.file?(@crate_bin)
 
-    puts "Crate is not available. Please run 'bundle exec ruby spec/bootstrap.rb' first."
+    puts "CrateDB is not available. Please run 'bundle exec ruby spec/bootstrap.rb' first."
     exit 1
   end
 
@@ -72,7 +72,7 @@ class TestServer
     interval = 1
     loop do
       if !alive? && (time_slept > STARTUP_TIMEOUT)
-        puts "Crate hasn't started for #{STARTUP_TIMEOUT} seconds. Giving up now..."
+        puts "CrateDB hasn't started for #{STARTUP_TIMEOUT} seconds. Giving up now..."
         exit 1
       end
       break if alive?
