@@ -221,7 +221,7 @@ describe CrateRuby::Client do
   describe 'authentication' do
     let(:username) { 'matz' }
     let(:password) { 'ruby' }
-    let(:encrypted_credentials) { Base64.encode64 "#{username}:#{password}" }
+    let(:encrypted_credentials) { Base64.strict_encode64 "#{username}:#{password}" }
 
     describe 'with password' do
       let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username, password: password) }
@@ -233,11 +233,22 @@ describe CrateRuby::Client do
 
     describe 'without password' do
       let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username) }
-      let(:enc_creds_wo_pwd) { Base64.encode64 "#{username}:" }
+      let(:enc_creds_wo_pwd) { Base64.strict_encode64 "#{username}:" }
 
       it 'sets and encodes auth header even without password' do
         headers = auth_client.send(:headers)
         expect(headers['Authorization']).to eq "Basic #{enc_creds_wo_pwd}"
+      end
+    end
+
+    describe 'with a long password' do
+      let(:password) { 'this password is long and would cause Base64 wrapping' }
+      let(:auth_client) { CrateRuby::Client.new(['localhost:44200'], username: username, password: password) }
+
+      it 'encodes the basic auth header correctly' do
+        headers = auth_client.send(:headers)
+        expect(headers['Authorization']).to eq "Basic #{encrypted_credentials}"
+        expect(encrypted_credentials).not_to include("\n")
       end
     end
 

@@ -243,7 +243,7 @@ module CrateRuby
     end
 
     def encrypted_credentials
-      @encrypted_credentials ||= Base64.encode64 "#{username}:#{password}"
+      @encrypted_credentials ||= Base64.strict_encode64 "#{username}:#{password}"
     end
   end
 end
