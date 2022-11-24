@@ -33,7 +33,7 @@ To create a new release, you must:
 
 - Update ``CrateRuby.version`` in ``lib/crate_ruby/version.rb``
 
-- Add a section for the new version in the ``history.txt`` file
+- Add a section for the new version in the ``CHANGES.rst`` file
 
 - Commit your changes with a message like "prepare release x.y.z"
 

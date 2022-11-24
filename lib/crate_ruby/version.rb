@@ -21,5 +21,5 @@
 # software solely pursuant to the terms of the relevant commercial agreement.
 
 module CrateRuby
-  VERSION = '0.2.0'
+  VERSION = '0.2.1'
 end

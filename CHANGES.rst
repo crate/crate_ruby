@@ -7,6 +7,17 @@ unreleased
 ==========
 
 
+0.2.1
+=====
+
+- Prevent Base64 wrapping in basic auth headers, when the username/password for a
+  CrateDB cluster is particularly long. Thanks, @ahorner.
+
+- Drop support for EOL Ruby versions. Thanks, @hammerhead.
+
+- Add support for Ruby 3.1.
+
+
 0.2.0
 =====
 
