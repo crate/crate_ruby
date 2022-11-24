@@ -29,9 +29,9 @@ Gem::Specification.new do |spec|
   spec.version       = CrateRuby::VERSION
   spec.authors       = ['Christoph Klocker', 'CRATE Technology GmbH']
   spec.email         = ['office@crate.io']
-  spec.summary       = 'A simple interface for the Crate.IO database.'
-  spec.description   = 'A Ruby interface for Crate.IO. Put your data to work. Simply.'
-  spec.homepage      = 'http://crate.io'
+  spec.summary       = 'CrateDB HTTP client library for Ruby'
+  spec.description   = 'A Ruby interface for CrateDB featuring query support, DDL command shortcuts, and support for BLOB tables'
+  spec.homepage      = 'https://crate.io'
   spec.license       = 'Apache-2.0'
   spec.required_ruby_version = '>= 2.6'
 
