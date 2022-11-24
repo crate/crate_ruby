@@ -17,6 +17,15 @@ Then, run tests::
 
     $ bundle exec rspec
 
+Run linter::
+
+    $ bundle exec rubocop
+
+Update linter violations file::
+
+    $ bundle exec rubocop --auto-gen-config
+
+
 Preparing a Release
 ===================
 
