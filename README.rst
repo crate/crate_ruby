@@ -6,10 +6,6 @@ CrateDB Ruby Client
    :target: https://github.com/crate/crate_ruby/actions?workflow=Tests
    :alt: Build Status
 
-.. image:: https://codeclimate.com/github/crate/crate_ruby.png
-   :target: https://codeclimate.com/github/crate/crate_ruby
-   :alt: Code Climate
-
 .. image:: https://badge.fury.io/rb/crate_ruby.svg
    :target: https://rubygems.org/gems/crate_ruby
    :alt: Gem Version
