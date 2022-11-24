@@ -16,7 +16,7 @@ jobs:
     steps:
 
       - name: Acquire sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -25,14 +25,14 @@ jobs:
           architecture: x64
 
       - name: Caching of CrateDB
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-cratedb
         with:
           path: parts
           key: cratedb-os=${{ matrix.os }}-${{ hashFiles('spec/bootstrap.rb') }}
 
       - name: Caching of Ruby gems
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-gems
         with:
           path: vendor/bundle
