@@ -54,6 +54,6 @@ Build the new gem::
 
 Publish the new gem::
 
-    $ gem push crate_ruby-<VERISON>.gem
+    $ gem push crate_ruby-<VERSION>.gem
 
-Here, ``<VERISON>`` is the version you are releasing.
+Here, ``<VERSION>`` is the version you are releasing.
