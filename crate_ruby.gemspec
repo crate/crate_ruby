@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #
-# Licensed to CRATE Technology GmbH ("Crate") under one or more contributor
+# Licensed to Crate.IO GmbH ("Crate") under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
 # additional information regarding copyright ownership.  Crate licenses
 # this file to you under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ require 'crate_ruby/version'
 Gem::Specification.new do |spec|
   spec.name          = 'crate_ruby'
   spec.version       = CrateRuby::VERSION
-  spec.authors       = ['Christoph Klocker', 'CRATE Technology GmbH']
+  spec.authors       = ['Christoph Klocker', 'Crate.IO GmbH']
   spec.email         = ['office@crate.io']
   spec.summary       = 'CrateDB HTTP client library for Ruby'
   spec.description   = 'A Ruby interface for CrateDB featuring query support, DDL command shortcuts, and support for BLOB tables'
