@@ -51,7 +51,7 @@ Gem::Specification.new do |spec|
   spec.metadata = {
     'bug_tracker_uri' => 'https://github.com/crate/crate_ruby/issues',
     'changelog_uri' => 'https://github.com/crate/crate_ruby/blob/main/CHANGES.rst',
-    'documentation_uri' => 'https://www.rubydoc.info/gems/crate_ruby/0.2.0',
+    'documentation_uri' => 'https://www.rubydoc.info/gems/crate_ruby',
     'homepage_uri' => spec.homepage,
     'source_code_uri' => 'https://github.com/crate/crate_ruby'
   }
