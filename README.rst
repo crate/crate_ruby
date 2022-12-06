@@ -17,7 +17,12 @@ CrateDB Ruby Client
 
 |
 
-A Ruby client library for CrateDB_.
+A Ruby client library for the CrateDB HTTP interface.
+
+- Query execution support.
+- DDL command and schema introspection shortcuts.
+- Support for BLOB tables.
+- Foundation for the `activerecord-crate-adapter`_.
 
 
 *************
@@ -31,7 +36,7 @@ You will need Ruby 2.0 or greater.
 Installation
 ************
 
-The CrateDB Ruby client is available as a Ruby gem_.
+The CrateDB Ruby client is available on RubyGems.org, see `crate_ruby on RubyGems.org`_.
 
 To use it, add this line to your application's ``Gemfile``::
 
@@ -52,13 +57,13 @@ Set up the client.
 
     require 'crate_ruby'
 
-    client = CrateRuby::Client.new
+    client = CrateRuby::Client.new()
 
 Execute SQL queries.
 
 .. code:: ruby
 
-    result = client.execute("Select * from posts")
+    result = client.execute("SELECT * FROM posts")
      => #<CrateRuby::ResultSet:0x00000002a9c5e8 @rowcount=1, @duration=5>
 
     result.each do |row|
@@ -118,6 +123,15 @@ SSL can be enabled.
     CrateRuby::Client.new(['localhost:4200'], ssl: true)
 
 
+*****
+Notes
+*****
+
+See also `CrateDB examples for Ruby`_ for a basic example program, which
+exercises both the `crate_ruby`_ driver, as well as Ruby's canonical `pg`_
+driver.
+
+
 ************
 Contributing
 ************
@@ -136,9 +150,15 @@ Looking for more help?
 
 - Check out our `support channels`_
 
+
+.. _activerecord-crate-adapter: https://github.com/crate/activerecord-crate-adapter
 .. _contribution docs: CONTRIBUTING.rst
 .. _Crate.IO GmbH: https://crate.io
 .. _CrateDB: https://github.com/crate/crate
+.. _CrateDB examples for Ruby: https://github.com/crate/cratedb-examples/tree/main/by-language/ruby
+.. _crate_ruby: https://rubygems.org/gems/crate_ruby
+.. _crate_ruby on RubyGems.org: https://rubygems.org/gems/crate_ruby
 .. _developer docs: DEVELOP.rst
 .. _gem: https://rubygems.org/
+.. _pg: https://rubygems.org/gems/pg
 .. _support channels: https://crate.io/support/
