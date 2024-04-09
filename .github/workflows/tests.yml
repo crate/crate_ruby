@@ -34,14 +34,14 @@ jobs:
           architecture: x64
 
       - name: Caching of CrateDB
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-cratedb
         with:
           path: parts
           key: cratedb-os=${{ matrix.os }}-${{ hashFiles('spec/bootstrap.rb') }}
 
       - name: Caching of Ruby gems
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-gems
         with:
           path: vendor/bundle
