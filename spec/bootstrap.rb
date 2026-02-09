@@ -58,9 +58,7 @@ class Bootstrap
     Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
       request = Net::HTTP::Get.new uri
       resp = http.request request
-      File.open(@fname, 'wb') do |file|
-        file.write(resp.body)
-      end
+      File.binwrite(@fname, resp.body)
     end
   end
 
