@@ -21,5 +21,6 @@ log/crate.log
 crate_test_server.*
 crate-*.tar.gz
 parts/
+vendor/
 
 .byebug_history
