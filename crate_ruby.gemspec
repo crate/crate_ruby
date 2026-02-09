@@ -37,7 +37,6 @@ Gem::Specification.new do |spec|
 
   spec.files         = Dir['lib/**/*']
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = %w[lib]
   spec.extra_rdoc_files = Dir['README.rst', 'CHANGES.rst', 'LICENSE', 'NOTICE']
   spec.rdoc_options    += [
@@ -53,9 +52,11 @@ Gem::Specification.new do |spec|
     'changelog_uri' => 'https://github.com/crate/crate_ruby/blob/main/CHANGES.rst',
     'documentation_uri' => 'https://www.rubydoc.info/gems/crate_ruby',
     'homepage_uri' => spec.homepage,
-    'source_code_uri' => 'https://github.com/crate/crate_ruby'
+    'source_code_uri' => 'https://github.com/crate/crate_ruby',
+    'rubygems_mfa_required' => 'true'
   }
 
+  spec.add_development_dependency 'base64'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'os'
   spec.add_development_dependency 'rake'

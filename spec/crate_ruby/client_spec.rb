@@ -72,9 +72,7 @@ describe CrateRuby::Client do
         it 'downloads a blob' do
           data = client.blob_get(blob_table, digest)
           expect(data).to be_truthy
-          File.open(store_location, 'wb') do |file|
-            file.write(data)
-          end
+          File.binwrite(store_location, data)
         end
       end
 
@@ -85,7 +83,8 @@ describe CrateRuby::Client do
         end
 
         it 'deletes a blob' do
-          client.blob_delete(blob_table, digest)
+          response = client.blob_delete(blob_table, digest)
+          expect(response).to be_falsy
         end
       end
     end
@@ -95,7 +94,7 @@ describe CrateRuby::Client do
 
       before do
         client.execute("create table #{table_name} " \
-           '(id integer primary key, name string, address object, tags array(string)) ')
+                       '(id integer primary key, name string, address object, tags array(string)) ')
       end
 
       after do
