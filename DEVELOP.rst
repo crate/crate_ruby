@@ -17,6 +17,9 @@ Then, run tests::
 
     $ bundle exec rspec
 
+Linter
+======
+
 Run linter::
 
     $ bundle exec rubocop
@@ -24,6 +27,13 @@ Run linter::
 Update linter violations file::
 
     $ bundle exec rubocop --auto-gen-config
+
+Dependencies
+============
+
+Update lock file ``Gemfile.lock``::
+
+    $ bundle update
 
 
 Preparing a Release
