@@ -25,6 +25,8 @@ jobs:
       matrix:
         os: [ "ubuntu-22.04", "macos-15-intel" ] # , windows-latest ]
         ruby-version: [
+          "2.4",
+          "2.5",
           "2.6",
           "2.7",
           "3.0",
@@ -73,4 +75,6 @@ jobs:
         run: bundle exec rspec
 
       - name: Run rubocop
+        # rubocop does not work on old versions of Ruby.
+        if: ${{ matrix.ruby-version != '2.4' && matrix.ruby-version != '2.5' }}
         run: bundle exec rubocop
