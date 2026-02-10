@@ -33,7 +33,6 @@ Gem::Specification.new do |spec|
   spec.description   = 'A Ruby library for the CrateDB HTTP interface with query support, DDL command and schema introspection shortcuts, and support for BLOB tables.'
   spec.homepage      = 'https://crate.io'
   spec.license       = 'Apache-2.0'
-  spec.required_ruby_version = '>= 2.5'
 
   spec.files         = Dir['lib/**/*']
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
