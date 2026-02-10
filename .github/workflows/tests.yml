@@ -28,6 +28,7 @@ jobs:
           "2.0",
           "3.4",
           "4.0",
+          "head",
         ]
 
     name: Ruby ${{ matrix.ruby-version }} on OS ${{ matrix.os }}
