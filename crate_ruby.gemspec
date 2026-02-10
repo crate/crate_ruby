@@ -55,6 +55,8 @@ Gem::Specification.new do |spec|
     'rubygems_mfa_required' => 'true'
   }
 
+  spec.add_dependency 'logger' if RUBY_VERSION >= '4.0'
+
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'os'
   spec.add_development_dependency 'rspec', '~> 3.10'
@@ -65,4 +67,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'base64' if RUBY_VERSION >= '2.3'
   spec.add_development_dependency 'benchmark' if RUBY_VERSION >= '2.3'
   spec.add_development_dependency 'ostruct' if RUBY_VERSION >= '2.3'
+  spec.add_development_dependency 'tsort' if RUBY_VERSION >= '4.0'
 end

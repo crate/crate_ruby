@@ -27,6 +27,7 @@ jobs:
         ruby-version: [
           "2.0",
           "3.4",
+          "4.0",
         ]
 
     name: Ruby ${{ matrix.ruby-version }} on OS ${{ matrix.os }}
