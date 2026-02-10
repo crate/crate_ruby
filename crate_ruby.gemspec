@@ -62,7 +62,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-rspec'
 
   # Needed by rubocop.
-  spec.add_development_dependency 'base64'
-  spec.add_development_dependency 'benchmark'
-  spec.add_development_dependency 'ostruct'
+  spec.add_development_dependency 'base64' if RUBY_VERSION >= '2.3'
+  spec.add_development_dependency 'benchmark' if RUBY_VERSION >= '2.3'
+  spec.add_development_dependency 'ostruct' if RUBY_VERSION >= '2.3'
 end
