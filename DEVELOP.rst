@@ -28,14 +28,6 @@ Update linter violations file::
 
     $ bundle exec rubocop --auto-gen-config
 
-Dependencies
-============
-
-Update lock file ``Gemfile.lock``::
-
-    $ bundle update
-
-
 Preparing a Release
 ===================
 
