@@ -63,7 +63,6 @@ jobs:
 
       - name: Bundle install
         run: |
-          gem install bundler
           bundle config path vendor/bundle
           bundle install
 
