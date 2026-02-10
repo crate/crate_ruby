@@ -7,3 +7,6 @@ AllCops:
 
 Gemspec/RequiredRubyVersion:
   Enabled: false
+
+Gemspec/RubyVersionGlobalsUsage:
+  Enabled: false
