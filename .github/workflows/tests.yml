@@ -59,7 +59,7 @@ jobs:
         id: cache-gems
         with:
           path: vendor/bundle
-          key: gems-os=${{ matrix.os }}-ruby=${{ matrix.ruby-version }}-${{ hashFiles('**/Gemfile.lock') }}
+          key: gems-os=${{ matrix.os }}-ruby=${{ matrix.ruby-version }}-${{ hashFiles('**/*.gemspec') }}
 
       - name: Bundle install
         run: |
