@@ -6,6 +6,11 @@ crate_ruby changelog
 unreleased
 ==========
 
+0.2.2
+=====
+
+- CI: Validated on recent versions of Ruby up to 4.1-dev
+
 
 0.2.1
 =====
