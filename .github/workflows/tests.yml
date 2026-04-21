@@ -30,6 +30,9 @@ jobs:
           "4.0",
           "head",
         ]
+        exclude:
+          - os: "ubuntu-22.04"
+            ruby-version: "2.0"
 
     name: Ruby ${{ matrix.ruby-version }} on OS ${{ matrix.os }}
     steps:
