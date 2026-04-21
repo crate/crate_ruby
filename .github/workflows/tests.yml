@@ -30,6 +30,11 @@ jobs:
           "4.0",
           "head",
         ]
+        exclude:
+          - os: 'macos-15-intel'
+            ruby-version: '3.4'
+          - os: 'macos-15-intel'
+            ruby-version: '4.0'
 
     name: Ruby ${{ matrix.ruby-version }} on OS ${{ matrix.os }}
     steps:
