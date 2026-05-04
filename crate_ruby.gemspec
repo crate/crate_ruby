@@ -60,7 +60,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'os'
   spec.add_development_dependency 'rspec', '~> 3.10'
-  spec.add_development_dependency 'rubocop', '< 1.40'
+  spec.add_development_dependency 'rubocop', '< 1.87'
   spec.add_development_dependency 'rubocop-rspec'
 
   # Needed by rubocop.
