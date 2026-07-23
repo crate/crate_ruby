@@ -14,6 +14,11 @@ CrateDB Ruby Client
    :target: https://rubygems.org/gems/crate_ruby
    :alt: Total downloads
 
+****************
+Archived project
+****************
+
+The CrateDB Ruby project has been archived and is not maintained.
 
 |
 
